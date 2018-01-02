@@ -1,2 +1,2 @@
 # JF_ConfigTool
-This is a simple tool built in Java SE, that is for managing the configuration for jfphotobiz.
+This is a simple tool built in Java SE, that is used to manage the configuration for jfphotobiz.
