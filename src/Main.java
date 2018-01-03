@@ -11,5 +11,10 @@ public class Main {
 		boolean isTest = args.length > 0 ? true : false; 
 		Frames mainFrame = new Frames("Managing Config Files", isTest); 
 		mainFrame.setVisible(true);
+
+		Album test = new Album("Test");
+		test.folderName = "Slideshow";
+		test.coverImage = "/images/slideshow/image0.jpg";
+		test.
 	}
 }

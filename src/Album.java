@@ -27,6 +27,22 @@ class Album {
 	public String toString(){
 		return String.format("Album:%s\n", this.albumName);
 	}
+
+// "profile" : {"folderName" :"profile","coverImg" :"/images/assets/profile/IMG_5427 (1).jpg","images" : [
+// {"path" :"/images/assets/profile/IMG_5427 (1).jpg","width" : 1160 ,"height" : 1543 ,"dimension" : "portrait" 
+// }]
+// },
+	public String returnJSONObject(){
+		StringBuilder jsonObj = new StringBuilder();
+		jsonObj.append(this.folderName + " : {");
+			jsonObj.append("\"folderName\" : " + this.folderName);
+			jsonObj.append("\"coverImg\" : " + this.coverImage);
+			// jsonObj.append("\"images\" : " + this.folderName);
+			// jsonObj.append("\"folderName\" : " + this.folderName);
+		// jsonObj.append(String.format(this.folderName));
+		// String.format()
+		return jsonObj;
+	}
 }
 
 class Picture {

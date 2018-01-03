@@ -1,8 +1,11 @@
 {
+
 "profile" : {"folderName" :"profile","coverImg" :"/images/assets/profile/IMG_5427 (1).jpg","images" : [
 {"path" :"/images/assets/profile/IMG_5427 (1).jpg","width" : 1160 ,"height" : 1543 ,"dimension" : "portrait" 
 }]
 },
+
+
 "slideshow" : {"folderName" :"slideshow","coverImg" :"/images/slideshow/image0.jpg","images" : [
 {"path" :"/images/slideshow/image0.jpg","width" : 2592 ,"height" : 1728 ,"dimension" : "landscape" 
 },
@@ -19,6 +22,7 @@
 {"path" :"/images/slideshow/image6.jpg","width" : 2592 ,"height" : 1728 ,"dimension" : "landscape" 
 }]
 },
+
 "Dev_One" : {"folderName" :"Dev_One","coverImg" :"/images/gallery/Dev_One/image0.jpg","images" : [
 {"path" :"/images/gallery/Dev_One/image0.jpg","width" : 1727 ,"height" : 2535 ,"dimension" : "portrait" 
 },

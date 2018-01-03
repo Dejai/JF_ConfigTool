@@ -19,24 +19,24 @@ public class Listeners extends JFrame {
 	private static String plainText;
 
 
-	public Listeners(Frames frame, boolean isTest){
-		if (isTest){
-			filePaths = new FilePaths("test");
-		} else {
-			filePaths = new FilePaths();
-		}
-		opSystem = filePaths.opSystemFull;
-
-		theMainFrame = frame;
-
-		for (JComponent actionable : theMainFrame.actionableButtons){
-			String action = parseAction(actionable.toString());				
-			if (actionable instanceof JButton){
-				addListeners( (JButton) actionable, action );
-			} else  if (actionable instanceof JComboBox){
-				addListeners( (JComboBox) actionable, action );
+		public Listeners(Frames frame, boolean isTest){
+			if (isTest){
+				filePaths = new FilePaths("test");
+			} else {
+				filePaths = new FilePaths();
 			}
-		}
+			opSystem = filePaths.opSystemFull;
+
+			theMainFrame = frame;
+
+			for (JComponent actionable : theMainFrame.actionableButtons){
+				String action = parseAction(actionable.toString());				
+				if (actionable instanceof JButton){
+					addListeners( (JButton) actionable, action );
+				} else  if (actionable instanceof JComboBox){
+					addListeners( (JComboBox) actionable, action );
+				}
+			}
 	}
 
 	// Adding Listeners for JButtons

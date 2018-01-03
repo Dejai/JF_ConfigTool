@@ -12,7 +12,8 @@ public class FilesCRUD {
 
 	public static boolean writeJSONFile(String fileParam, ArrayList<Album> albumArrayList){
 		try{
-			File fp = new File(fileParam);
+			// File fp = new File(fileParam);
+			File fp = new File("../config/newTest.json");
 			fp.setWritable(true);
 			BufferedWriter jsonOUT = new BufferedWriter(new FileWriter(fp, false));
 
@@ -21,8 +22,8 @@ public class FilesCRUD {
 			jsonOUT.newLine();
 			for (Album singleAlbum : albumArrayList){
 				String openJSON = String.format( "\"" + singleAlbum.albumName + "\" : {"
-				  +  "\"folderName\" :\"" + singleAlbum.albumName + "\","
-				  +  "\"coverImg\" :\"/" + singleAlbum.coverImage + "\","
+				  +  "\"folderName\" :\"" + singleAlbum.albumName + "\", "
+				  +  "\"coverImg\" :\"/" + singleAlbum.coverImage + "\", "
 				  +  "\"images\" : [");
 				jsonOUT.write(openJSON);
 				jsonOUT.newLine();
