@@ -25,8 +25,16 @@ class Album {
 		this.pictures.add(new Picture(p, w, h, d));
 	}
 
-	protected void setNewPhotosIndicators(String days){
+	protected void setNewPhotosIndicators(){
 		this.hasNewPhotos = true;
+		Calendar date = Calendar.getInstance();
+		date.add(date.DATE, 7);
+		int year = date.get(date.YEAR);
+		int month = date.get(date.MONTH)+1; 
+		int day = date.get(date.DAY_OF_MONTH);
+		this.newPhotosExpiration = String.format("%d-%02d-%02d", year, month, day);
+		// System.out.println(String.format("%d-%02d-%02d", year, month, day ));
+		// this.newPhotosExpiration = 
 		// Create a new data that is the number of given days in the future from today
 		// Then set this new date to the instance variable for newPhotoExpiration
 		// this.newPhotosExpiration = date;

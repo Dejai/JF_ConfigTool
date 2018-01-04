@@ -87,6 +87,9 @@ public class Listeners extends JFrame {
 				setNewPhotosIndicator();
 				// startImageThreads();
 				break;
+			case "Continue Processing":
+				startImageThreads();
+				break;
 			default:
 				System.out.println(action);
 				// System.out.println(actionable.toString());
@@ -136,6 +139,9 @@ public class Listeners extends JFrame {
 			ArrayList<String> galleryAlbums = FilesCRUD.getGalleryAlbums(filePaths.galleryDirectoryPath, filePaths.separator);
 
 			clearPanel(theMainFrame.innerRightPanel);
+			clearPanel(theMainFrame.newPhotosAlbumPanel);
+			newPhotosAlbums.clear();
+			
 			theMainFrame.innerRightPanel.add(theMainFrame.newPhotosLabel, new GridBagParams("newPhotosLabel"));
 			theMainFrame.innerRightPanel.add(theMainFrame.newPhotosSentence, new GridBagParams("newPhotosSentence"));
 
@@ -144,28 +150,19 @@ public class Listeners extends JFrame {
 
 			theMainFrame.newPhotosAlbumPanel.setLayout(new GridLayout(galleryAlbums.size()+3, 1));
 			for (String album : galleryAlbums){
-
-			// for (int x = 0; x < 10; x++) {
-				// String album = galleryAlbums.get(0);
 				String albumName = album.substring(album.lastIndexOf(filePaths.separator)+1);
 				JCheckBox thisCheck = new JCheckBox(albumName);
 				theMainFrame.newPhotosAlbumPanel.add(thisCheck);
 				thisCheck.addActionListener(new ActionListener(){
 					public void actionPerformed(ActionEvent e){
 						if (thisCheck.isSelected()){
-							System.out.println("Selected");
+							// System.out.println("Selected");
 							newPhotosAlbums.add(albumName);
 						}
-						// System.out.println(e);
-						// System.out.println(thisCheck.isSelected());
 					}
 				});
 			}
-
-
-			// theMainFrame.innerRightPanel.add(theMainFrame.workingOn, new GridBagParams("workingOn"));
 			validateView();
-
 		} catch (Exception ex){
 			theMainFrame.resultsMessageDialog(false, ex.getMessage());
 		}
@@ -174,7 +171,6 @@ public class Listeners extends JFrame {
 
 	public void showImagePreProcessing(){
 		clearPanel(theMainFrame.innerRightPanel);
-		// hideHTMLExamples();
 		theMainFrame.innerRightPanel.add(theMainFrame.compressImagesReminder, new GridBagParams("compressImagesReminder"));
 		theMainFrame.innerRightPanel.add(theMainFrame.useTinyPng, new GridBagParams("useTinyPng"));
 		theMainFrame.innerRightPanel.add(theMainFrame.startImageProcessing, new GridBagParams("startImageProcessing"));
@@ -260,8 +256,8 @@ public class Listeners extends JFrame {
 
 			String resultsMessage = oneBool ? successMesage : failMessage;
 			String resultsMessageFormatted = String.format("<html> %s </html>", resultsMessage);
-			theMainFrame.processingNow.setText("Processing Images");
 
+			theMainFrame.processingNow.setText("Process Images");
 			if (oneBool){
 				theMainFrame.workingOn.setText("");
 				theMainFrame.processingImage.setIcon(new ImageIcon(filePaths.successProcessingImg));
@@ -283,8 +279,12 @@ public class Listeners extends JFrame {
 			File dirList[] = dir.listFiles();
 			String albumName = directoryPath.substring(directoryPath.lastIndexOf(filePaths.separator)+1);
 
+			// System.out.println(newPhotosAlbums.toString());
 			Album temp = new Album(albumName);
-
+			if (newPhotosAlbums.contains(albumName)){
+				temp.setNewPhotosIndicators();
+				// System.out.println(albumName + " HAS NEW PHOTOS");
+			}
 			for (int x = 0; x < dirList.length; x++){
 				boolean isImage; 
 				String dimensionTemp = "";

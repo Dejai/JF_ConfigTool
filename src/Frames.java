@@ -73,7 +73,8 @@ public class Frames extends JFrame {
 		// Containers of Components
 			JComponent [] actionableButtons = { processImages, aboutMe, useTinyPng, 
 												toggleAboutMeEditor, saveAboutMe, 
-												startImageProcessing, htmlHelpDropdown };
+												startImageProcessing, htmlHelpDropdown,
+												continueProcessingPhotos };
 			// JComponent [] actionableButtons = { processImages, aboutMe, useTinyPng, toggleAboutMeEditor };
 			JLabel [] subheaders= {htmlHelpLabel, newPhotosSentence};
 			JLabel [] headers= {menuLabel, newPhotosLabel, processingNow, editAboutMe, getStartedLabel, compressImagesReminder };
