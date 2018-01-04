@@ -50,12 +50,12 @@ class Album {
 			jsonObj.append("\"hasNewPhotos\" : " + this.hasNewPhotos + ", ");
 			jsonObj.append("\"newPhotosExpiration\" : \"" + this.newPhotosExpiration +"\", ");
 			jsonObj.append("\"folderName\" : \"" + this.albumName + "\", ");
-			jsonObj.append("\"coverImg\" : \"" + this.coverImage + "\", ");
+			jsonObj.append("\"coverImg\" : \"/" + this.coverImage + "\", ");
 
 			StringBuilder picsObj = new StringBuilder();
 			for (Picture pic : this.pictures){
 				picsObj.append("{");
-				picsObj.append("\"path\" : \"" + pic.path + "\", ");
+				picsObj.append("\"path\" : \"/" + pic.path + "\", ");
 				picsObj.append("\"width\" : " + pic.width + ", ");
 				picsObj.append("\"height\" : " + pic.height + ", ");
 				picsObj.append("\"dimension\" : \"" + pic.dimension + "\"");
