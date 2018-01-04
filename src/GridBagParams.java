@@ -126,6 +126,39 @@ public class GridBagParams extends GridBagConstraints {
 				this.ipady = 10;
 				this.insets = new Insets(10,5,0,0);
 				break;
+			case "newPhotosLabel" :
+				this.fill = GridBagConstraints.BOTH;
+				this.gridx = 0; 
+				this.gridy = 0;
+				this.anchor = GridBagConstraints.CENTER;
+				this.insets = new Insets(10,0,20,0);  //top padding
+				break;
+			case "newPhotosSentence" :
+				this.fill = GridBagConstraints.BOTH;
+				this.gridx = 0; 
+				this.gridy = 1;
+				this.anchor = GridBagConstraints.CENTER;
+				this.insets = new Insets(10,0,20,0);  //top padding
+				break;
+			case "newPhotosAlbumListing":
+				this.fill = GridBagConstraints.BOTH;
+				this.gridx = 0; 
+				this.gridy = 2;
+				this.weighty = 0.5;
+				this.ipadx = 30;
+				this.weightx = 0.0;
+				this.gridwidth = 4;
+				break;
+			case "continueProcessingPhotos":
+				// this.fill = GridBagConstraints.BOTH;
+				this.gridx = 0; 
+				this.gridy = 3;
+				this.insets = new Insets(10,0,20,0);  //top padding
+				// this.weighty = 0.5;
+				// this.ipadx = 40;
+				// this.weightx = 0.0;
+				// this.gridwidth = 4;
+				break;
 			case "processingNow" :
 				this.fill = GridBagConstraints.BOTH;
 				this.gridx = 0; 

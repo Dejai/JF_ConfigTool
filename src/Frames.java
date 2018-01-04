@@ -36,6 +36,15 @@ public class Frames extends JFrame {
 
 
 			// Processing Images
+				JLabel newPhotosLabel = new JLabel("Any New Photos?");
+				JLabel newPhotosSentence = new JLabel("Select any album that has new photos.");
+				JPanel newPhotosAlbumPanel = new JPanel(new GridLayout(1,1));
+				int vsp = JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED; // vertical scroll policy
+				int hsp = JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED; //horizontal scroll policy
+				JScrollPane newPhotosAlbumListing = new JScrollPane(newPhotosAlbumPanel, vsp ,hsp );
+				JButton continueProcessingPhotos = new JButton ("Continue Processing");
+
+
 				JPanel imagePanel = new JPanel(new GridLayout(0,1));
 				JLabel processingImage = new JLabel("");
 
@@ -66,8 +75,8 @@ public class Frames extends JFrame {
 												toggleAboutMeEditor, saveAboutMe, 
 												startImageProcessing, htmlHelpDropdown };
 			// JComponent [] actionableButtons = { processImages, aboutMe, useTinyPng, toggleAboutMeEditor };
-			JLabel [] subheaders= {htmlHelpLabel};
-			JLabel [] headers= {menuLabel, processingNow, editAboutMe, getStartedLabel, compressImagesReminder };
+			JLabel [] subheaders= {htmlHelpLabel, newPhotosSentence};
+			JLabel [] headers= {menuLabel, newPhotosLabel, processingNow, editAboutMe, getStartedLabel, compressImagesReminder };
 			JComponent [] leftSide = {leftPanel, innerLeftPanel, bottomPanel};
 			JComponent [] rightSide = {rightPanel, innerRightPanel };
 

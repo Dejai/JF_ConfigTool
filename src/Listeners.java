@@ -18,6 +18,8 @@ public class Listeners extends JFrame {
 
 	private static String plainText;
 
+	private ArrayList<String> newPhotosAlbums = new ArrayList<String>();
+
 
 		public Listeners(Frames frame, boolean isTest){
 			if (isTest){
@@ -82,7 +84,8 @@ public class Listeners extends JFrame {
 				saveAboutMe();
 				break;
 			case "Start Processing":
-				startImageThreads();
+				setNewPhotosIndicator();
+				// startImageThreads();
 				break;
 			default:
 				System.out.println(action);
@@ -127,6 +130,48 @@ public class Listeners extends JFrame {
 
 
 //  Image Processes
+	public void setNewPhotosIndicator(){
+		try{
+
+			ArrayList<String> galleryAlbums = FilesCRUD.getGalleryAlbums(filePaths.galleryDirectoryPath, filePaths.separator);
+
+			clearPanel(theMainFrame.innerRightPanel);
+			theMainFrame.innerRightPanel.add(theMainFrame.newPhotosLabel, new GridBagParams("newPhotosLabel"));
+			theMainFrame.innerRightPanel.add(theMainFrame.newPhotosSentence, new GridBagParams("newPhotosSentence"));
+
+			theMainFrame.innerRightPanel.add(theMainFrame.newPhotosAlbumListing, new GridBagParams("newPhotosAlbumListing"));
+			theMainFrame.innerRightPanel.add(theMainFrame.continueProcessingPhotos, new GridBagParams("continueProcessingPhotos"));
+
+			theMainFrame.newPhotosAlbumPanel.setLayout(new GridLayout(galleryAlbums.size()+3, 1));
+			for (String album : galleryAlbums){
+
+			// for (int x = 0; x < 10; x++) {
+				// String album = galleryAlbums.get(0);
+				String albumName = album.substring(album.lastIndexOf(filePaths.separator)+1);
+				JCheckBox thisCheck = new JCheckBox(albumName);
+				theMainFrame.newPhotosAlbumPanel.add(thisCheck);
+				thisCheck.addActionListener(new ActionListener(){
+					public void actionPerformed(ActionEvent e){
+						if (thisCheck.isSelected()){
+							System.out.println("Selected");
+							newPhotosAlbums.add(albumName);
+						}
+						// System.out.println(e);
+						// System.out.println(thisCheck.isSelected());
+					}
+				});
+			}
+
+
+			// theMainFrame.innerRightPanel.add(theMainFrame.workingOn, new GridBagParams("workingOn"));
+			validateView();
+
+		} catch (Exception ex){
+			theMainFrame.resultsMessageDialog(false, ex.getMessage());
+		}
+
+	}
+
 	public void showImagePreProcessing(){
 		clearPanel(theMainFrame.innerRightPanel);
 		// hideHTMLExamples();
@@ -157,12 +202,12 @@ public class Listeners extends JFrame {
 	public void startImageThreads(){
 		try{
 			ImagesThread showImagesThread = new ImagesThread(this, "show");
-			showImagesThread.start();
+			showImagesThread.start(); //calls showImageProcessingSection()
 			showImagesThread.join();
 
 			ImagesThread startImagesThread = new ImagesThread(this, "start");
 			if (!showImagesThread.isAlive()){
-				startImagesThread.start();
+				startImagesThread.start(); // calls processImages()
 			}
  		} catch(InterruptedException ie){
  			theMainFrame.resultsMessageDialog(false, ie.getMessage());
@@ -237,7 +282,6 @@ public class Listeners extends JFrame {
 			File dir = new File(directoryPath);
 			File dirList[] = dir.listFiles();
 			String albumName = directoryPath.substring(directoryPath.lastIndexOf(filePaths.separator)+1);
-
 
 			Album temp = new Album(albumName);
 
