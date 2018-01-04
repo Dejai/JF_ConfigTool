@@ -12,9 +12,5 @@ public class Main {
 		Frames mainFrame = new Frames("Managing Config Files", isTest); 
 		mainFrame.setVisible(true);
 
-		Album test = new Album("Test");
-		test.folderName = "Slideshow";
-		test.coverImage = "/images/slideshow/image0.jpg";
-		test.
-	}
+	}		
 }

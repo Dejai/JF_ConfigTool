@@ -12,41 +12,22 @@ public class FilesCRUD {
 
 	public static boolean writeJSONFile(String fileParam, ArrayList<Album> albumArrayList){
 		try{
-			// File fp = new File(fileParam);
-			File fp = new File("../config/newTest.json");
+			File fp = new File(fileParam);
+			// File fp = new File("../config/newTest.json");
 			fp.setWritable(true);
 			BufferedWriter jsonOUT = new BufferedWriter(new FileWriter(fp, false));
-
 			jsonOUT.write("");
 			jsonOUT.write("{");
 			jsonOUT.newLine();
 			for (Album singleAlbum : albumArrayList){
-				String openJSON = String.format( "\"" + singleAlbum.albumName + "\" : {"
-				  +  "\"folderName\" :\"" + singleAlbum.albumName + "\", "
-				  +  "\"coverImg\" :\"/" + singleAlbum.coverImage + "\", "
-				  +  "\"images\" : [");
-				jsonOUT.write(openJSON);
-				jsonOUT.newLine();
-
-				for (Picture yx : singleAlbum.pictures){
-					String imgJSON = String.format("{"
-						+ "\"path\" :\"/" + yx.path.replace("\\", "/") + "\","
-						+ "\"width\" : " + yx.width  + " ,"
-						+ "\"height\" : " + yx.height + " ,"
-						+ "\"dimension\" : \"" + yx.dimension + "\" ");
-					jsonOUT.write(imgJSON);
-					jsonOUT.newLine();
-					String commaOption = (singleAlbum.pictures.indexOf(yx) == singleAlbum.pictures.size()-1) ? "}]" : "},";
-					jsonOUT.write(String.format(commaOption));
-					jsonOUT.newLine();
-				}
-				String commaOption2 = ( albumArrayList.indexOf(singleAlbum) == albumArrayList.size()-1 ) ? "}" : "},";
-				jsonOUT.write(String.format(commaOption2));
+				int currentAlbumIndex = albumArrayList.indexOf(singleAlbum);
+				int albumArrayListSize = albumArrayList.size()-1;
+				boolean isLastObject = currentAlbumIndex == albumArrayListSize  ? true : false;
+				jsonOUT.write(singleAlbum.albumJSONObject(isLastObject));
 				jsonOUT.newLine();
 			}
 			jsonOUT.write("}");
 			jsonOUT.close();
-
 			return true;
 		} catch (Exception ex){
 		    return false;

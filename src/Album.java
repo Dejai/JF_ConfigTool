@@ -3,9 +3,10 @@ import java.util.*;
 class Album {
 
 	protected String albumName; 
-	protected String folderName; 
 	protected String coverImage; 
 	protected boolean hasCoverImage;
+	protected boolean hasNewPhotos = false;
+	protected String newPhotosExpiration = "N/A";
 	protected ArrayList<Picture> pictures = new ArrayList<Picture>();
 	protected HashMap<String, String> pics = new HashMap<String, String>();
 
@@ -24,24 +25,43 @@ class Album {
 		this.pictures.add(new Picture(p, w, h, d));
 	}
 
+	protected void setNewPhotosIndicators(String days){
+		this.hasNewPhotos = true;
+		// Create a new data that is the number of given days in the future from today
+		// Then set this new date to the instance variable for newPhotoExpiration
+		// this.newPhotosExpiration = date;
+	}
+
 	public String toString(){
 		return String.format("Album:%s\n", this.albumName);
 	}
 
-// "profile" : {"folderName" :"profile","coverImg" :"/images/assets/profile/IMG_5427 (1).jpg","images" : [
-// {"path" :"/images/assets/profile/IMG_5427 (1).jpg","width" : 1160 ,"height" : 1543 ,"dimension" : "portrait" 
-// }]
-// },
-	public String returnJSONObject(){
+	public String albumJSONObject(boolean isLast){
 		StringBuilder jsonObj = new StringBuilder();
-		jsonObj.append(this.folderName + " : {");
-			jsonObj.append("\"folderName\" : " + this.folderName);
-			jsonObj.append("\"coverImg\" : " + this.coverImage);
-			// jsonObj.append("\"images\" : " + this.folderName);
-			// jsonObj.append("\"folderName\" : " + this.folderName);
-		// jsonObj.append(String.format(this.folderName));
-		// String.format()
-		return jsonObj;
+		jsonObj.append("\"" + this.albumName + "\" : {");
+			jsonObj.append("\"hasNewPhotos\" : " + this.hasNewPhotos + ", ");
+			jsonObj.append("\"newPhotosExpiration\" : \"" + this.newPhotosExpiration +"\", ");
+			jsonObj.append("\"folderName\" : \"" + this.albumName + "\", ");
+			jsonObj.append("\"coverImg\" : \"" + this.coverImage + "\", ");
+
+			StringBuilder picsObj = new StringBuilder();
+			for (Picture pic : this.pictures){
+				picsObj.append("{");
+				picsObj.append("\"path\" : \"" + pic.path + "\", ");
+				picsObj.append("\"width\" : " + pic.width + ", ");
+				picsObj.append("\"height\" : " + pic.height + ", ");
+				picsObj.append("\"dimension\" : \"" + pic.dimension + "\"");
+				picsObj.append("}");
+				boolean addComma = this.pictures.indexOf(pic) == this.pictures.size()-1 ? false : true;
+				if (addComma){
+					picsObj.append(",");
+				}
+			}
+			jsonObj.append("\"images\" : [ " + picsObj.toString() +  " ] ");
+		String closingBrace = isLast ? "}" : "},";
+		jsonObj.append(closingBrace);
+
+		return jsonObj.toString();
 	}
 }
 
