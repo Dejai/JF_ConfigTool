@@ -210,8 +210,18 @@ public class Listeners extends JFrame {
  		}	
 	}
 
+	public void buttonsWhileProcessing(boolean clickable){
+		for (JComponent comp : theMainFrame.actionableButtons){
+			if (!clickable){
+				comp.setEnabled(false);
+			} else {
+				comp.setEnabled(true);
+			}
+		}
+	}
 	public void showImageProcessingSection(){
 		try{
+			buttonsWhileProcessing(false);
 			clearPanel(theMainFrame.innerRightPanel);
 
 			theMainFrame.processingNow.setText("<html>Processing Images ... <span style='color:orange;font-weight:bold;'>RUNNING NOW</span></html>");
@@ -232,6 +242,7 @@ public class Listeners extends JFrame {
 
 	public void processImages(){
 		try{
+
 			theMainFrame.workingOn.setText("Working on:");
 
 			ArrayList<Album> albumsList = new ArrayList<Album>();
@@ -258,6 +269,8 @@ public class Listeners extends JFrame {
 			String resultsMessageFormatted = String.format("<html> %s </html>", resultsMessage);
 
 			theMainFrame.processingNow.setText("Process Images");
+			buttonsWhileProcessing(true);
+
 			if (oneBool){
 				theMainFrame.workingOn.setText("");
 				theMainFrame.processingImage.setIcon(new ImageIcon(filePaths.successProcessingImg));
