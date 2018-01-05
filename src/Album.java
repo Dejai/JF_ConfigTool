@@ -33,11 +33,6 @@ class Album {
 		int month = date.get(date.MONTH)+1; 
 		int day = date.get(date.DAY_OF_MONTH);
 		this.newPhotosExpiration = String.format("%d-%02d-%02d", year, month, day);
-		// System.out.println(String.format("%d-%02d-%02d", year, month, day ));
-		// this.newPhotosExpiration = 
-		// Create a new data that is the number of given days in the future from today
-		// Then set this new date to the instance variable for newPhotoExpiration
-		// this.newPhotosExpiration = date;
 	}
 
 	public String toString(){
@@ -51,7 +46,7 @@ class Album {
 		String code = String.format("%d%02d%02d-%d", date.get(date.YEAR), date.get(date.MONTH)+1, date.get(date.DAY_OF_MONTH), rando.nextInt(9999)+1 );
 		jsonObj.append("\"" + this.albumName + "\" : {");
 			jsonObj.append("\"hasNewPhotos\" : " + this.hasNewPhotos + ", ");
-			jsonObj.append("\"newPhotosCode\" : " + code + ", ");
+			jsonObj.append("\"newPhotosCode\" : \"" + code + "\", ");
 			jsonObj.append("\"newPhotosExpiration\" : \"" + this.newPhotosExpiration +"\", ");
 			jsonObj.append("\"folderName\" : \"" + this.albumName + "\", ");
 			jsonObj.append("\"coverImg\" : \"/" + this.coverImage + "\", ");
