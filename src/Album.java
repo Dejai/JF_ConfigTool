@@ -46,8 +46,12 @@ class Album {
 
 	public String albumJSONObject(boolean isLast){
 		StringBuilder jsonObj = new StringBuilder();
+		Calendar date = Calendar.getInstance();
+		Random rando = new Random();
+		String code = String.format("%d%02d%02d-%d", date.get(date.YEAR), date.get(date.MONTH)+1, date.get(date.DAY_OF_MONTH), rando.nextInt(9999)+1 );
 		jsonObj.append("\"" + this.albumName + "\" : {");
 			jsonObj.append("\"hasNewPhotos\" : " + this.hasNewPhotos + ", ");
+			jsonObj.append("\"newPhotosCode\" : " + code + ", ");
 			jsonObj.append("\"newPhotosExpiration\" : \"" + this.newPhotosExpiration +"\", ");
 			jsonObj.append("\"folderName\" : \"" + this.albumName + "\", ");
 			jsonObj.append("\"coverImg\" : \"/" + this.coverImage + "\", ");
