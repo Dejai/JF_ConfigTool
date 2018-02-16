@@ -19,24 +19,20 @@ public class Listeners extends JFrame {
 	private static String plainText;
 
 
-		public Listeners(Frames frame, boolean isTest){
-			if (isTest){
-				filePaths = new FilePaths("test");
-			} else {
-				filePaths = new FilePaths();
-			}
-			opSystem = filePaths.opSystemFull;
+	public Listeners(Frames mainFrame, FilePaths mainFilePaths){
 
-			theMainFrame = frame;
+		theMainFrame = mainFrame;
 
-			for (JComponent actionable : theMainFrame.actionableButtons){
-				String action = parseAction(actionable.toString());				
-				if (actionable instanceof JButton){
-					addListeners( (JButton) actionable, action );
-				} else  if (actionable instanceof JComboBox){
-					addListeners( (JComboBox) actionable, action );
-				}
+		filePaths = mainFilePaths; 
+
+		for (JComponent actionable : theMainFrame.actionableButtons){
+			String action = parseAction(actionable.toString());				
+			if (actionable instanceof JButton){
+				addListeners( (JButton) actionable, action );
+			} else  if (actionable instanceof JComboBox){
+				addListeners( (JComboBox) actionable, action );
 			}
+		}
 	}
 
 	// Adding Listeners for JButtons
@@ -210,7 +206,7 @@ public class Listeners extends JFrame {
 			boolean oneBool = FilesCRUD.writeJSONFile(filePaths.albumsJSONPath, albumsList);
 
 
-			String successMesage = "<span style='color:green;font-weight:bold'>SUCCESS:</span> All images were processed successfully.";
+			String successMesage = "<span style='color:green;font-weight:bold'>SUCCESS:</span> All images were processed successfully. <br/><br/><h3>Click <span style='color:blue'>OK</span> to open http://localhost</h3>";
 			String failMessage = "<span style='color:red;font-weight:bold'>ERROR:</span>Could not complete the process.";
 
 			String resultsMessage = oneBool ? successMesage : failMessage;
@@ -221,6 +217,7 @@ public class Listeners extends JFrame {
 				theMainFrame.workingOn.setText("");
 				theMainFrame.processingImage.setIcon(new ImageIcon(filePaths.successProcessingImg));
 				theMainFrame.resultsMessageDialog(true, resultsMessageFormatted);
+				openLocalHost();
 			} else {
 				theMainFrame.workingOn.setText("<html>Something went wrong. To try and remedy this, go to the 'src' folder and click on the filePermission file (the one with the gear icon).</html>");
 				theMainFrame.processingImage.setIcon(new ImageIcon(filePaths.oopsImg));
@@ -229,6 +226,24 @@ public class Listeners extends JFrame {
 		} catch (Exception ex){
 			theMainFrame.resultsMessageDialog(false, ex.getMessage());
 		}	
+	}
+
+	public void openLocalHost(){
+		if (Desktop.isDesktopSupported()) {
+			try {
+				URI tinyPngURI = new URI("http://localhost");
+	        	Desktop.getDesktop().browse(tinyPngURI);
+		   	} catch (URISyntaxException ex){
+		   		System.out.println(ex.getMessage());
+		   		theMainFrame.resultsMessageDialog(false, ex.getMessage());
+			} catch (IOException ex) { /* TODO: error handling */ 
+		   		theMainFrame.resultsMessageDialog(false, ex.getMessage());
+		   	} catch (Exception ex){
+		   		theMainFrame.resultsMessageDialog(false, ex.getMessage());
+			}
+		} else { 
+			theMainFrame.resultsMessageDialog(false, "Desktop access is not supported. Cannot open the site from here. Go to http://localhost");
+		}
 	}
 	
 	

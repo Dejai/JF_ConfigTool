@@ -4,7 +4,6 @@ import java.awt.*;
 
 public class Frames extends JFrame {
 
-
 	// JComponent Attributes
 		// Main Window & Content Panel
 			JPanel contentPane = new JPanel();
@@ -72,17 +71,18 @@ public class Frames extends JFrame {
 			JComponent [] rightSide = {rightPanel, innerRightPanel };
 
 
-	public Frames( String title, boolean testState ){
+	// public Frames( String title, boolean testState, Listeners frameListener ){
+	public Frames( String title ){
 
 		super ( title );
 		setSize(800, 500);
 		setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setLayout(new GridBagLayout());
+	}
 
-		Listeners ll = new Listeners (this, testState);
-		initFrame(ll.opSystem);
-
+	public static void ToString(){
+		System.out.println("This is the main -- OG -- Frame");
 	}
 
 	public void initFrame(String opSystem){

@@ -7,10 +7,19 @@ public class Main {
 	public static void main (String args []){
 
 		// This boolean indicates whether or not I am testing out functionality.
-		// It is passed to the Frames then Listeners objects, to be used appropriately for the filePaths object
-		boolean isTest = args.length > 0 ? true : false; 
-		Frames mainFrame = new Frames("Managing Config Files", isTest); 
-		mainFrame.setVisible(true);
+		boolean isTest = args.length > 0 ? true : false;
 
+		String frameName = isTest ? "Testing Config Tool" : "Managing Config Tools";
+
+		Frames mainFrame = new Frames(frameName);
+
+		FilePaths mainFilePaths = new FilePaths(isTest);
+		
+		Listeners mainListener = new Listeners(mainFrame, mainFilePaths);
+		
+		mainFrame.initFrame(mainFilePaths.opSystem);
+
+		mainFrame.setVisible(true);
 	}		
+
 }

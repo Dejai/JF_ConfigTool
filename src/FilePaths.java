@@ -1,6 +1,7 @@
 import java.util.*;
 import java.net.*;
 import java.io.*;
+import java.awt.Desktop;
 
 public class FilePaths{
 
@@ -13,68 +14,42 @@ public class FilePaths{
 	protected String slideshowDirectoryPath;
 	protected String profileDirectoryPath;
 	protected String separator; 
+	protected String prefix;
 	protected String oopsImg; 
 	protected String successProcessingImg; 
 
 	private ArrayList<String> gifs = new ArrayList<String>();
 
 
-	public FilePaths(){
-
+	public FilePaths(boolean isTest){
 		opSystemFull =  System.getProperty("os.name");
 		opSystem = opSystemFull.toLowerCase().indexOf("mac") >= 0 ? "mac" : "windows" ;
+
+		separator = opSystem == "mac" ? "/" : "\\";
+		
+		prefix = isTest ? ".." + separator : "";
+
 		setFilePaths(opSystem);
-		getGIFS();
-	}
-	public FilePaths(String testing){
-		opSystemFull =  System.getProperty("os.name");
-		opSystem = opSystemFull.toLowerCase().indexOf("mac") >= 0 ? "mac" : "windows" ;
-		setTestFilePaths(opSystem);
+
 		getGIFS();
 	}
 
-	// This method is to set the file paths of the production tool
-	// @Override
 	public void setFilePaths(String os){
-		aboutMeFilePath = os == "windows" ? "config\\aboutMe.txt" : "config/aboutMe.txt";
 
-		albumsJSONPath = os == "windows" ? "config\\albumsJSON.json" : "config/albumsJSON.json";
+		aboutMeFilePath = buildPath("config_aboutMe.txt");
+		albumsJSONPath = buildPath("config_albumsJSON.json");
+		galleryDirectoryPath = buildPath("images_gallery");
+		slideshowDirectoryPath = buildPath("images_slideshow");
+		profileDirectoryPath = buildPath("images_assets_profile");
+		gifsPath = buildPath("images_assets_gifs");
+		oopsImg = buildPath("images_assets_icons_oops2.png");
+		successProcessingImg = buildPath("images_assets_icons_successProcessing.png");
 
-		galleryDirectoryPath = os == "windows" ? "images\\gallery" : "images/gallery";
-
-		slideshowDirectoryPath = os == "windows" ? "images\\slideshow" : "images/slideshow";
-
-		profileDirectoryPath = os == "windows" ? "images\\assets\\profile" : "images/assets/profile";
-
-		gifsPath = os == "windows" ? "images\\assets\\gifs\\" : "images/assets/gifs/";
-
-		separator = os == "windows" ? "\\" : "/";
-
-		oopsImg = os == "windows" ? "images\\assets\\icons\\oops2.png" : "images/assets/icons/oops2.png";
-
-		successProcessingImg = os == "windows" ? "images\\assets\\icons\\successProcessing.png" : "images/assets/icons/successProcessing.png";	
 	}
 
-	// This is specifically for testing purposes
-	// @Override
-	public void setTestFilePaths(String os){
-		aboutMeFilePath = os == "windows" ? "..\\config\\aboutMe.txt" : "../config/aboutMe.txt";
-
-		albumsJSONPath = os == "windows" ? "..\\config\\albumsJSON.json" : "../config/albumsJSON.json";
-
-		galleryDirectoryPath = os == "windows" ? "..\\images\\gallery" : "../images/gallery";
-
-		slideshowDirectoryPath = os == "windows" ? "..\\images\\slideshow" : "../images/slideshow";
-
-		profileDirectoryPath = os == "windows" ? "..\\images\\assets\\profile" : "../images/assets/profile";
-
-		gifsPath = os == "windows" ? "..\\images\\assets\\gifs\\" : "../images/assets/gifs/";
-
-		separator = os == "windows" ? "\\" : "/";
-
-		oopsImg = os == "windows" ? "..\\images\\assets\\icons\\oops2.png" : "../images/assets/icons/oops2.png";
-
-		successProcessingImg = os == "windows" ? "..\\images\\assets\\icons\\successProcessing.png" : "../images/assets/icons/successProcessing.png";	
+	public String buildPath(String filePath){
+		String buildSeparator = separator == "\\" ? "\\\\" : "/";
+		return prefix + filePath.replaceAll("_", buildSeparator);
 	}
 
 
@@ -101,6 +76,23 @@ public class FilePaths{
 			return null; 
 		}
 	}
+
+	// This is a function to open a folder on the current end system
+	// Not sure yet ... But I feel like this could be useful to me at some point.
+	// public void selectFolder(){
+	// 	if (Desktop.isDesktopSupported()) {
+	// 		try {
+	// 			File folder = new File("/");
+	// 			Desktop.getDesktop().open(folder);
+	// 		} catch (IOException ex) { /* TODO: error handling */ 
+	// 	   		System.out.println(ex.getMessage());
+	// 	   	} catch (Exception ex){
+	// 	   		System.out.println(ex.getMessage());		   		
+	// 		}
+	// 	} else { 
+	// 		System.out.println("Desktop access is not supported. Cannot open the site from here. Go to http://localhost");
+	// 	}
+	// }
 
 	
 }
