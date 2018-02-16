@@ -25,11 +25,14 @@ class Album {
 		this.pictures.add(new Picture(p, w, h, d));
 	}
 
-	protected void setNewPhotosIndicators(String days){
+	protected void setNewPhotosIndicators(){
 		this.hasNewPhotos = true;
-		// Create a new data that is the number of given days in the future from today
-		// Then set this new date to the instance variable for newPhotoExpiration
-		// this.newPhotosExpiration = date;
+		Calendar date = Calendar.getInstance();
+		date.add(date.DATE, 7);
+		int year = date.get(date.YEAR);
+		int month = date.get(date.MONTH)+1; 
+		int day = date.get(date.DAY_OF_MONTH);
+		this.newPhotosExpiration = String.format("%d-%02d-%02d", year, month, day);
 	}
 
 	public String toString(){
@@ -38,16 +41,20 @@ class Album {
 
 	public String albumJSONObject(boolean isLast){
 		StringBuilder jsonObj = new StringBuilder();
+		Calendar date = Calendar.getInstance();
+		Random rando = new Random();
+		String code = String.format("%d%02d%02d-%d", date.get(date.YEAR), date.get(date.MONTH)+1, date.get(date.DAY_OF_MONTH), rando.nextInt(9999)+1 );
 		jsonObj.append("\"" + this.albumName + "\" : {");
 			jsonObj.append("\"hasNewPhotos\" : " + this.hasNewPhotos + ", ");
+			jsonObj.append("\"newPhotosCode\" : \"" + code + "\", ");
 			jsonObj.append("\"newPhotosExpiration\" : \"" + this.newPhotosExpiration +"\", ");
 			jsonObj.append("\"folderName\" : \"" + this.albumName + "\", ");
-			jsonObj.append("\"coverImg\" : \"" + this.coverImage + "\", ");
+			jsonObj.append("\"coverImg\" : \"/" + this.coverImage + "\", ");
 
 			StringBuilder picsObj = new StringBuilder();
 			for (Picture pic : this.pictures){
 				picsObj.append("{");
-				picsObj.append("\"path\" : \"" + pic.path + "\", ");
+				picsObj.append("\"path\" : \"/" + pic.path + "\", ");
 				picsObj.append("\"width\" : " + pic.width + ", ");
 				picsObj.append("\"height\" : " + pic.height + ", ");
 				picsObj.append("\"dimension\" : \"" + pic.dimension + "\"");

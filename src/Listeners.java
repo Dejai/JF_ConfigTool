@@ -18,6 +18,8 @@ public class Listeners extends JFrame {
 
 	private static String plainText;
 
+	private ArrayList<String> newPhotosAlbums = new ArrayList<String>();
+
 
 	public Listeners(Frames mainFrame, FilePaths mainFilePaths){
 
@@ -78,6 +80,10 @@ public class Listeners extends JFrame {
 				saveAboutMe();
 				break;
 			case "Start Processing":
+				setNewPhotosIndicator();
+				// startImageThreads();
+				break;
+			case "Continue Processing":
 				startImageThreads();
 				break;
 			default:
@@ -123,9 +129,44 @@ public class Listeners extends JFrame {
 
 
 //  Image Processes
+	public void setNewPhotosIndicator(){
+		try{
+
+			ArrayList<String> galleryAlbums = FilesCRUD.getGalleryAlbums(filePaths.galleryDirectoryPath, filePaths.separator);
+
+			clearPanel(theMainFrame.innerRightPanel);
+			clearPanel(theMainFrame.newPhotosAlbumPanel);
+			newPhotosAlbums.clear();
+			
+			theMainFrame.innerRightPanel.add(theMainFrame.newPhotosLabel, new GridBagParams("newPhotosLabel"));
+			theMainFrame.innerRightPanel.add(theMainFrame.newPhotosSentence, new GridBagParams("newPhotosSentence"));
+
+			theMainFrame.innerRightPanel.add(theMainFrame.newPhotosAlbumListing, new GridBagParams("newPhotosAlbumListing"));
+			theMainFrame.innerRightPanel.add(theMainFrame.continueProcessingPhotos, new GridBagParams("continueProcessingPhotos"));
+
+			theMainFrame.newPhotosAlbumPanel.setLayout(new GridLayout(galleryAlbums.size()+3, 1));
+			for (String album : galleryAlbums){
+				String albumName = album.substring(album.lastIndexOf(filePaths.separator)+1);
+				JCheckBox thisCheck = new JCheckBox(albumName);
+				theMainFrame.newPhotosAlbumPanel.add(thisCheck);
+				thisCheck.addActionListener(new ActionListener(){
+					public void actionPerformed(ActionEvent e){
+						if (thisCheck.isSelected()){
+							// System.out.println("Selected");
+							newPhotosAlbums.add(albumName);
+						}
+					}
+				});
+			}
+			validateView();
+		} catch (Exception ex){
+			theMainFrame.resultsMessageDialog(false, ex.getMessage());
+		}
+
+	}
+
 	public void showImagePreProcessing(){
 		clearPanel(theMainFrame.innerRightPanel);
-		// hideHTMLExamples();
 		theMainFrame.innerRightPanel.add(theMainFrame.compressImagesReminder, new GridBagParams("compressImagesReminder"));
 		theMainFrame.innerRightPanel.add(theMainFrame.useTinyPng, new GridBagParams("useTinyPng"));
 		theMainFrame.innerRightPanel.add(theMainFrame.startImageProcessing, new GridBagParams("startImageProcessing"));
@@ -153,20 +194,30 @@ public class Listeners extends JFrame {
 	public void startImageThreads(){
 		try{
 			ImagesThread showImagesThread = new ImagesThread(this, "show");
-			showImagesThread.start();
+			showImagesThread.start(); //calls showImageProcessingSection()
 			showImagesThread.join();
 
 			ImagesThread startImagesThread = new ImagesThread(this, "start");
 			if (!showImagesThread.isAlive()){
-				startImagesThread.start();
+				startImagesThread.start(); // calls processImages()
 			}
  		} catch(InterruptedException ie){
  			theMainFrame.resultsMessageDialog(false, ie.getMessage());
  		}	
 	}
 
+	public void buttonsWhileProcessing(boolean clickable){
+		for (JComponent comp : theMainFrame.actionableButtons){
+			if (!clickable){
+				comp.setEnabled(false);
+			} else {
+				comp.setEnabled(true);
+			}
+		}
+	}
 	public void showImageProcessingSection(){
 		try{
+			buttonsWhileProcessing(false);
 			clearPanel(theMainFrame.innerRightPanel);
 
 			theMainFrame.processingNow.setText("<html>Processing Images ... <span style='color:orange;font-weight:bold;'>RUNNING NOW</span></html>");
@@ -187,6 +238,7 @@ public class Listeners extends JFrame {
 
 	public void processImages(){
 		try{
+
 			theMainFrame.workingOn.setText("Working on:");
 
 			ArrayList<Album> albumsList = new ArrayList<Album>();
@@ -211,7 +263,9 @@ public class Listeners extends JFrame {
 
 			String resultsMessage = oneBool ? successMesage : failMessage;
 			String resultsMessageFormatted = String.format("<html> %s </html>", resultsMessage);
-			theMainFrame.processingNow.setText("Processing Images");
+
+			theMainFrame.processingNow.setText("Process Images");
+			buttonsWhileProcessing(true);
 
 			if (oneBool){
 				theMainFrame.workingOn.setText("");
@@ -253,9 +307,12 @@ public class Listeners extends JFrame {
 			File dirList[] = dir.listFiles();
 			String albumName = directoryPath.substring(directoryPath.lastIndexOf(filePaths.separator)+1);
 
-
+			// System.out.println(newPhotosAlbums.toString());
 			Album temp = new Album(albumName);
-
+			if (newPhotosAlbums.contains(albumName)){
+				temp.setNewPhotosIndicators();
+				// System.out.println(albumName + " HAS NEW PHOTOS");
+			}
 			for (int x = 0; x < dirList.length; x++){
 				boolean isImage; 
 				String dimensionTemp = "";
