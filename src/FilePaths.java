@@ -13,6 +13,8 @@ public class FilePaths{
 	protected String galleryDirectoryPath;
 	protected String slideshowDirectoryPath;
 	protected String profileDirectoryPath;
+	protected String processImagesLogFilePath;
+	protected String aboutMeLogFilePath;
 	protected String separator; 
 	protected String prefix;
 	protected String oopsImg; 
@@ -41,6 +43,8 @@ public class FilePaths{
 		galleryDirectoryPath = buildPath("images_gallery");
 		slideshowDirectoryPath = buildPath("images_slideshow");
 		profileDirectoryPath = buildPath("images_assets_profile");
+		processImagesLogFilePath = buildPath("log_processImagesLog.txt");
+		aboutMeLogFilePath = buildPath("log_aboutMeLog.txt");
 		gifsPath = buildPath("images_assets_gifs");
 		oopsImg = buildPath("images_assets_icons_oops2.png");
 		successProcessingImg = buildPath("images_assets_icons_successProcessing.png");

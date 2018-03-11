@@ -6,6 +6,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.Component;
 import java.awt.event.*;
 
 public class Listeners extends JFrame {
@@ -34,6 +35,9 @@ public class Listeners extends JFrame {
 			} else  if (actionable instanceof JComboBox){
 				addListeners( (JComboBox) actionable, action );
 			}
+			// } else if (actionable instanceof JLabel){
+			// 	addListeners((JLabel) actionable, action);
+			// }
 		}
 	}
 
@@ -57,6 +61,20 @@ public class Listeners extends JFrame {
 			}
 		});
 	}
+
+	// Adding Listeners for JComboBox
+	// @Overload
+	// public void addListeners(JLabel label, String action){ 
+	// 	label.addMouseListener(new MouseListener(){
+	// 		public void mouseClicked(MouseEvent e){
+	// 			assignListenerFunction(action);
+	// 		}
+	// 		public void mouseEntered(MouseEvent e){}
+	// 		public void mouseExited(MouseEvent e){}
+	// 		public void mousePressed(MouseEvent e){}
+	// 		public void mouseReleased(MouseEvent e){}
+	// 	});
+	// }
 
 	public void assignListenerFunction(String action){
 		switch (action){
@@ -239,18 +257,28 @@ public class Listeners extends JFrame {
 	public void processImages(){
 		try{
 
+			Logger.logData(filePaths.processImagesLogFilePath);
+
 			theMainFrame.workingOn.setText("Working on:");
 
 			ArrayList<Album> albumsList = new ArrayList<Album>();
 			
+			Logger.addBlankLine(filePaths.processImagesLogFilePath);
+			Logger.logData(filePaths.processImagesLogFilePath, filePaths.profileDirectoryPath);
+
 			albumsList.add(processDirectory(filePaths.profileDirectoryPath));
 
 			// Process the slideshow pictures
+			Logger.addBlankLine(filePaths.processImagesLogFilePath);
+			Logger.logData(filePaths.processImagesLogFilePath, filePaths.slideshowDirectoryPath);
+
 			albumsList.add(processDirectory(filePaths.slideshowDirectoryPath));
 
 			// First get the gallery albums, then process each one. 
 			ArrayList<String> galleryAlbums = FilesCRUD.getGalleryAlbums(filePaths.galleryDirectoryPath, filePaths.separator);
 			for (String gal : galleryAlbums){
+				Logger.addBlankLine(filePaths.processImagesLogFilePath);
+				Logger.logData(filePaths.processImagesLogFilePath, gal);
 				albumsList.add(processDirectory(gal));
 			}
 
@@ -271,7 +299,10 @@ public class Listeners extends JFrame {
 				theMainFrame.workingOn.setText("");
 				theMainFrame.processingImage.setIcon(new ImageIcon(filePaths.successProcessingImg));
 				theMainFrame.resultsMessageDialog(true, resultsMessageFormatted);
-				openLocalHost();
+				theMainFrame.innerRightPanel.remove(theMainFrame.workingOn);
+				theMainFrame.innerRightPanel.remove(theMainFrame.processingImage);
+				theMainFrame.innerRightPanel.add(theMainFrame.openLocalhost, new GridBagParams("imagePanel"));
+				// openLocalHost();
 			} else {
 				theMainFrame.workingOn.setText("<html>Something went wrong. To try and remedy this, go to the 'src' folder and click on the filePermission file (the one with the gear icon).</html>");
 				theMainFrame.processingImage.setIcon(new ImageIcon(filePaths.oopsImg));
@@ -317,8 +348,11 @@ public class Listeners extends JFrame {
 				boolean isImage; 
 				String dimensionTemp = "";
 				isImage = checkIfIsImage(dirList[x].getPath());
+				String startedProcessingMessage = String.format("%s\t%s", dirList[x].getPath(), "<--> started processing");
+				Logger.logData(filePaths.processImagesLogFilePath, startedProcessingMessage);
 
 				if (!dirList[x].isDirectory() && isImage){
+
 					BufferedImage imageB = ImageIO.read(new File(dirList[x].getPath()));
 					theMainFrame.workingOn.setText(String.format("<html>Working on:<br/><span style='font-weight:bold; color:white;'>%s</span></html>", dirList[x].getPath()));
 
@@ -334,13 +368,21 @@ public class Listeners extends JFrame {
 
 					temp.addPicture(dirList[x].getPath(), imageB.getWidth(), imageB.getHeight(), dimensionTemp);
 
+					String processedMessage = String.format("%s\t%s", dirList[x].getPath(), "<--> successfully processed");
+					Logger.logData(filePaths.processImagesLogFilePath, processedMessage);
+					Logger.addBlankLine(filePaths.processImagesLogFilePath);
+
 					if (!temp.hasCoverImage || dirList[x].getPath().contains("cover_") ){
 						temp.setCoverImage(dirList[x].getPath());
 					}
+				} else {
+					String errorMessage = String.format("%s\nDetails:\t%s", dirList[x].getPath(), "This image is not considered an image that can be added");
+					Logger.logError(filePaths.processImagesLogFilePath, errorMessage );
 				}
 			}
 			return temp;
 		} catch (Exception ex){
+			Logger.logError(filePaths.processImagesLogFilePath, ex.getMessage());
 		    System.out.println(ex.getMessage());
 		 	ex.printStackTrace();
 		 	return null;
@@ -423,6 +465,7 @@ public class Listeners extends JFrame {
 
 	public void toggleAboutMeEditor(){
 		try{
+
 			String contentType = theMainFrame.aboutMeTextEditor.getContentType();
 			if(contentType == "text/plain"){
 				theMainFrame.toggleAboutMeEditor.setText("Edit");

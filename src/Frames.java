@@ -31,6 +31,7 @@ public class Frames extends JFrame {
 
 			JLabel compressImagesReminder = new JLabel("<html><p>Remember to compress your images!</p></html>");
 			JButton useTinyPng = new JButton("<html><span id='useTinyPNG'></span><font color='blue'><strong>Click here to go to TinyPng.com</strong></font></html>");
+			JButton openLocalhost = new JButton("<html><span id='localhost'></span><font color='blue'><strong>Click here to open http://localhost</strong></font></html>");
 			JButton startImageProcessing = new JButton("Start Processing");
 
 
@@ -73,7 +74,7 @@ public class Frames extends JFrame {
 			JComponent [] actionableButtons = { processImages, aboutMe, useTinyPng, 
 												toggleAboutMeEditor, saveAboutMe, 
 												startImageProcessing, htmlHelpDropdown,
-												continueProcessingPhotos };
+												continueProcessingPhotos, openLocalhost };
 			// JComponent [] actionableButtons = { processImages, aboutMe, useTinyPng, toggleAboutMeEditor };
 			JLabel [] subheaders= {htmlHelpLabel, newPhotosSentence};
 			JLabel [] headers= {menuLabel, newPhotosLabel, processingNow, editAboutMe, getStartedLabel, compressImagesReminder };
