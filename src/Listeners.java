@@ -41,8 +41,10 @@ public class Listeners extends JFrame {
 		}
 	}
 
-	// Adding Listeners for JButtons
-	// @Overload
+	/*	addListeners( JButton, String):
+			>> This function adds an event listener to the given JButton
+			>> It dynamically assigns the action function via assignListenerFunction()
+	*/
 	public void addListeners(JButton button, String action){ 
 		button.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
@@ -51,9 +53,10 @@ public class Listeners extends JFrame {
 		});
 	}
 
-
-	// Adding Listeners for JComboBox
-	// @Overload
+	/*	@Overload: addListeners( JComboBox, String):
+			>> This function adds an event listener to the given JComboBox
+			>> It dynamically assigns the action function via assignListenerFunction()
+	*/
 	public void addListeners(JComboBox box, String action){ 
 		box.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
@@ -62,7 +65,6 @@ public class Listeners extends JFrame {
 		});
 	}
 
-	// Adding Listeners for JComboBox
 	// @Overload
 	// public void addListeners(JLabel label, String action){ 
 	// 	label.addMouseListener(new MouseListener(){
@@ -85,7 +87,8 @@ public class Listeners extends JFrame {
 				showAboutMesection();
 				break;
 			case "useTinyPNG":
-				openTinyPNGSite();
+				// openTinyPNGSite();
+				openWebsite("http://tinypng.com");
 				break;
 			case "Preview":
 			case "Edit":
@@ -98,11 +101,15 @@ public class Listeners extends JFrame {
 				saveAboutMe();
 				break;
 			case "Start Processing":
-				setNewPhotosIndicator();
-				// startImageThreads();
+				// setNewPhotosIndicator();
+				startImageThreads();
 				break;
 			case "Continue Processing":
 				startImageThreads();
+				break;
+			case "Preview Beta Site":
+				// openLocalHost();
+				openWebsite("http://localhost");
 				break;
 			default:
 				System.out.println(action);
@@ -143,26 +150,19 @@ public class Listeners extends JFrame {
 	}
 
 
-
+/* ACTION METHODS - called from Event Listeners */
 
 
 //  Image Processes
-	public void setNewPhotosIndicator(){
+	public void addListOfAlbums(){
 		try{
-
 			ArrayList<String> galleryAlbums = FilesCRUD.getGalleryAlbums(filePaths.galleryDirectoryPath, filePaths.separator);
-
-			clearPanel(theMainFrame.innerRightPanel);
-			clearPanel(theMainFrame.newPhotosAlbumPanel);
+			// clearPanel(theMainFrame.innerRightPanel);
+			theMainFrame.clearPanel(theMainFrame.newPhotosAlbumPanel);
 			newPhotosAlbums.clear();
-			
-			theMainFrame.innerRightPanel.add(theMainFrame.newPhotosLabel, new GridBagParams("newPhotosLabel"));
-			theMainFrame.innerRightPanel.add(theMainFrame.newPhotosSentence, new GridBagParams("newPhotosSentence"));
-
-			theMainFrame.innerRightPanel.add(theMainFrame.newPhotosAlbumListing, new GridBagParams("newPhotosAlbumListing"));
-			theMainFrame.innerRightPanel.add(theMainFrame.continueProcessingPhotos, new GridBagParams("continueProcessingPhotos"));
 
 			theMainFrame.newPhotosAlbumPanel.setLayout(new GridLayout(galleryAlbums.size()+3, 1));
+
 			for (String album : galleryAlbums){
 				String albumName = album.substring(album.lastIndexOf(filePaths.separator)+1);
 				JCheckBox thisCheck = new JCheckBox(albumName);
@@ -173,29 +173,30 @@ public class Listeners extends JFrame {
 							// System.out.println("Selected");
 							newPhotosAlbums.add(albumName);
 						}
+						// } else if (newPhotosAlbums[albumName] && !thisCheck.isSelected()) {
+						// 	newPhotosAlbums.remove(albumName);
+						// }
 					}
 				});
 			}
-			validateView();
+			theMainFrame.validateView();
 		} catch (Exception ex){
 			theMainFrame.resultsMessageDialog(false, ex.getMessage());
 		}
-
 	}
 
 	public void showImagePreProcessing(){
-		clearPanel(theMainFrame.innerRightPanel);
-		theMainFrame.innerRightPanel.add(theMainFrame.compressImagesReminder, new GridBagParams("compressImagesReminder"));
-		theMainFrame.innerRightPanel.add(theMainFrame.useTinyPng, new GridBagParams("useTinyPng"));
-		theMainFrame.innerRightPanel.add(theMainFrame.startImageProcessing, new GridBagParams("startImageProcessing"));
-		validateView();
+		theMainFrame.clearPanel(theMainFrame.innerRightPanel);
+		theMainFrame.loadView("Pre-Image Processing");
+		addListOfAlbums();
+		theMainFrame.validateView();
 	}
 
-	public void openTinyPNGSite(){
+	public void openWebsite(String site){
 		if (Desktop.isDesktopSupported()) {
 			try {
-				URI tinyPngURI = new URI("http://tinypng.com");
-	        	Desktop.getDesktop().browse(tinyPngURI);
+				URI website = new URI(site);
+	        	Desktop.getDesktop().browse(website);
 		   	} catch (URISyntaxException ex){
 		   		System.out.println(ex.getMessage());
 		   		theMainFrame.resultsMessageDialog(false, ex.getMessage());
@@ -205,7 +206,8 @@ public class Listeners extends JFrame {
 		   		theMainFrame.resultsMessageDialog(false, ex.getMessage());
 			}
 		} else { 
-			theMainFrame.resultsMessageDialog(false, "Desktop access is not supported. Cannot open the site from here. Go to www.tinypng.com");
+			String errorMessage = String.format("Desktop access is not supported. Cannot open the site from here. Go to %s directly", site);
+			theMainFrame.resultsMessageDialog(false, errorMessage);
 		}
 	}
 
@@ -233,20 +235,28 @@ public class Listeners extends JFrame {
 			}
 		}
 	}
+
 	public void showImageProcessingSection(){
 		try{
 			buttonsWhileProcessing(false);
 			clearPanel(theMainFrame.innerRightPanel);
 
 			theMainFrame.processingNow.setText("<html>Processing Images ... <span style='color:orange;font-weight:bold;'>RUNNING NOW</span></html>");
-			theMainFrame.innerRightPanel.add(theMainFrame.processingNow, new GridBagParams("processingNow"));
+			theMainFrame.addToPanel(theMainFrame.innerRightPanel, theMainFrame.processingNow, "viewAreaLabel");
+
+			// theMainFrame.innerRightPanel.add(theMainFrame.processingNow, new GridBagParams("processingNow"));
 
 			String procImg = filePaths.getRandomGIF();
 			theMainFrame.processingImage.setIcon(new ImageIcon(procImg));
 			theMainFrame.imagePanel.add(theMainFrame.processingImage);
-			theMainFrame.innerRightPanel.add(theMainFrame.imagePanel, new GridBagParams("imagePanel"));
 
-			theMainFrame.innerRightPanel.add(theMainFrame.workingOn, new GridBagParams("workingOn"));
+			// theMainFrame.innerRightPanel.add(theMainFrame.imagePanel, new GridBagParams("imagePanel"));
+			theMainFrame.addToPanel(theMainFrame.innerRightPanel, theMainFrame.imagePanel, "viewAreaMainSection");
+
+
+			// theMainFrame.innerRightPanel.add(theMainFrame.workingOn, new GridBagParams("workingOn"));
+			theMainFrame.addToPanel(theMainFrame.innerRightPanel, theMainFrame.workingOn, "viewAreaDescription");
+
 			validateView();
 
 		} catch (Exception ex){
@@ -286,7 +296,7 @@ public class Listeners extends JFrame {
 			boolean oneBool = FilesCRUD.writeJSONFile(filePaths.albumsJSONPath, albumsList);
 
 
-			String successMesage = "<span style='color:green;font-weight:bold'>SUCCESS:</span> All images were processed successfully. <br/><br/><h3>Click <span style='color:blue'>OK</span> to open http://localhost</h3>";
+			String successMesage = "<span style='color:green;font-weight:bold'>SUCCESS:</span> All images were processed successfully.";
 			String failMessage = "<span style='color:red;font-weight:bold'>ERROR:</span>Could not complete the process.";
 
 			String resultsMessage = oneBool ? successMesage : failMessage;
@@ -300,8 +310,12 @@ public class Listeners extends JFrame {
 				theMainFrame.processingImage.setIcon(new ImageIcon(filePaths.successProcessingImg));
 				theMainFrame.resultsMessageDialog(true, resultsMessageFormatted);
 				theMainFrame.innerRightPanel.remove(theMainFrame.workingOn);
-				theMainFrame.innerRightPanel.remove(theMainFrame.processingImage);
-				theMainFrame.innerRightPanel.add(theMainFrame.openLocalhost, new GridBagParams("imagePanel"));
+				theMainFrame.innerRightPanel.remove(theMainFrame.processingImage);				
+				// theMainFrame.innerRightPanel.add(theMainFrame.openLocalhost, new GridBagParams("imagePanel"));
+				// theMainFrame.innerRightPanel.add(theMainFrame.openLocalhost, new GridBagParams("workingOn"));
+				// theMainFrame.addToPanel(theMainFrame.innerRightPanel, theMainFrame.openLocalhost, "viewAreaDescription");
+				// theMainFrame.addToPanel(theMainFrame.innerRightPanel, theMainFrame.workingOn, "viewAreaDescription");
+				// validateView();
 				// openLocalHost();
 			} else {
 				theMainFrame.workingOn.setText("<html>Something went wrong. To try and remedy this, go to the 'src' folder and click on the filePermission file (the one with the gear icon).</html>");
@@ -312,25 +326,6 @@ public class Listeners extends JFrame {
 			theMainFrame.resultsMessageDialog(false, ex.getMessage());
 		}	
 	}
-
-	public void openLocalHost(){
-		if (Desktop.isDesktopSupported()) {
-			try {
-				URI tinyPngURI = new URI("http://localhost");
-	        	Desktop.getDesktop().browse(tinyPngURI);
-		   	} catch (URISyntaxException ex){
-		   		System.out.println(ex.getMessage());
-		   		theMainFrame.resultsMessageDialog(false, ex.getMessage());
-			} catch (IOException ex) { /* TODO: error handling */ 
-		   		theMainFrame.resultsMessageDialog(false, ex.getMessage());
-		   	} catch (Exception ex){
-		   		theMainFrame.resultsMessageDialog(false, ex.getMessage());
-			}
-		} else { 
-			theMainFrame.resultsMessageDialog(false, "Desktop access is not supported. Cannot open the site from here. Go to http://localhost");
-		}
-	}
-	
 	
 	public Album processDirectory(String directoryPath){
 		try{
@@ -410,8 +405,6 @@ public class Listeners extends JFrame {
  
 
 
-
-
 // About Me Processes
 
 	public void selectHTMLExamples(){
@@ -438,6 +431,8 @@ public class Listeners extends JFrame {
 
 	public void saveAboutMe(){
 		try{
+			Logger.logData(filePaths.aboutMeLogFilePath);
+
 			String saveText;
 			boolean isSaved; 
 			if (theMainFrame.aboutMeTextEditor.getContentType() == "text/html"){
@@ -452,6 +447,12 @@ public class Listeners extends JFrame {
 			String results = isSaved ? "SUCCESS" : "ERROR";
 			String resultsHTML = String.format("<span style='color:%s;font-weight:bold'>%s</span>", color, results);
 			String fullMessage = String.format("<html>%s:  %s</hml>", resultsHTML, messageHTML);
+
+
+			Logger.addBlankLine(filePaths.aboutMeLogFilePath);
+			Logger.logData(filePaths.aboutMeLogFilePath, message);
+			Logger.addBlankLine(filePaths.aboutMeLogFilePath);
+			Logger.logData(filePaths.aboutMeLogFilePath, theMainFrame.aboutMeTextEditor.getText());
 			
 			theMainFrame.resultsMessageDialog(isSaved, fullMessage);
 			theMainFrame.aboutMeTextEditor.setText("");
@@ -459,6 +460,7 @@ public class Listeners extends JFrame {
 
 
 		} catch (Exception ex){
+			Logger.logError(filePaths.aboutMeLogFilePath, ex.getMessage());
 			theMainFrame.resultsMessageDialog(false, ex.getMessage());
 		}
 	}
@@ -490,7 +492,5 @@ public class Listeners extends JFrame {
 			theMainFrame.resultsMessageDialog(false, ex.getMessage());
 		}
 	}
-
-
 
 }

@@ -3,9 +3,98 @@ import java.awt.*;
 
 public class GridBagParams extends GridBagConstraints {
 
+	private static int MenuRows = 0; 
+
 	GridBagParams(String type){
 		super ();
 		returnConstraints(type);
+	}
+
+	GridBagParams(String type, int row){
+		super();
+		returnConstraints(type, row);
+	}
+
+	public void returnConstraints(String type, int row){
+		switch (type) {
+			case "menuLabel":
+				this.fill = GridBagConstraints.HORIZONTAL;
+				this.weightx = 0.5;				
+				this.gridx = 0; 
+				this.gridy = row;
+				this.ipadx = 50;
+				this.ipady = 10;
+				this.insets = new Insets(10,5,0,10);  
+				break;
+			case "menuButton":
+			case "menuDropdown":
+				this.weightx = 0.5;				
+				this.gridx = 0; 
+				this.gridy = row; 
+				this.insets = type == "menuButton" ? new Insets(10,20,0,0) : new Insets(10,5,0,10);
+				break;
+			case "menuSection":
+				// this.fill = GridBagConstraints.HORIZONTAL;
+				this.weightx = 0.5;				
+				this.gridx = 0; 
+				this.gridy = row;
+				this.ipady = 10;
+				this.insets = new Insets(10,5,0,10);  
+				break;
+			case "viewAreaLabel":
+				this.fill = GridBagConstraints.BOTH;
+				this.gridx = 0; 
+				this.gridy = row;
+				this.anchor = GridBagConstraints.CENTER;
+				this.insets = new Insets(10,0,20,0);
+				break;
+			case "viewAreaButton":
+				this.fill = GridBagConstraints.HORIZONTAL;
+				this.gridx = 0;
+				this.gridy = row;
+				this.weightx = 1;
+				this.insets = new Insets(0,0,20,60);
+				break;
+			case "viewAreaMainSection":
+				this.fill = GridBagConstraints.BOTH;
+				this.gridx = 0; 
+				this.gridy = row;
+				this.weighty = 0.5;
+				this.ipadx = 30;
+				this.weightx = 0.0;
+				this.gridwidth = 4;
+				this.anchor = GridBagConstraints.CENTER;
+				break;
+			case "viewAreaDescription":
+				this.fill = GridBagConstraints.BOTH;
+				this.weighty = 1.0;
+				this.gridx = 0; 
+				this.gridy = row;
+				this.insets = new Insets(10,0,0,0);  //top padding
+				break;
+			// case "htmlHelpLabel":
+			// 	this.fill = GridBagConstraints.HORIZONTAL;
+			// 	this.gridx = 0; 
+			// 	this.gridy = 4;
+			// 	this.insets = new Insets(10,5,0,0);  //top padding
+			// 	break;
+			// case "htmlHelpDropdown":
+			// 	this.weightx = 0.5;			
+			// 	this.gridx = 0; 
+			// 	this.gridy = 5;
+			// 	this.insets = new Insets(10,5,0,10);
+			// 	break;
+			// case "htmlExampleArea":
+			// 	this.fill = GridBagConstraints.HORIZONTAL;
+			// 	this.weightx = 0.5;			
+			// 	this.gridx = 0; 
+			// 	this.gridy = 6;
+			// 	this.ipady = 10;
+			// 	this.insets = new Insets(10,5,0,0);
+			// 	break;
+			default:
+				System.out.println("Not a valid option!");
+		}
 	}
 
 	public void returnConstraints(String type){
@@ -14,22 +103,23 @@ public class GridBagParams extends GridBagConstraints {
 				this.fill = GridBagConstraints.HORIZONTAL;
 				this.weightx = 0.5;				
 				this.gridx = 0; 
-				this.gridy = 0;
+				this.gridy = MenuRows;
+				MenuRows++;
 				this.ipadx = 50;
 				this.insets = new Insets(10,5,0,10);  //top padding
-				break;
-			case "processImagesButton":
-				this.weightx = 0.5;				
-				this.gridx = 0; 
-				this.gridy = 1;
-				this.insets = new Insets(10,20,0,0);
-				break;
-			case "aboutMeButton" :
-				this.weightx = 0.5;				
-				this.gridx = 0; 
-				this.gridy = 2;
-				this.insets = new Insets(10,20,0,0); 
-				break;
+				break;			
+			// case "processImagesButton":
+			// 	this.weightx = 0.5;				
+			// 	this.gridx = 0; 
+			// 	this.gridy = 1;
+			// 	this.insets = new Insets(10,20,0,0);
+			// 	break;
+			// case "aboutMeButton" :
+			// 	this.weightx = 0.5;				
+			// 	this.gridx = 0; 
+			// 	this.gridy = 2;
+			// 	this.insets = new Insets(10,20,0,0); 
+			// 	break;
 			case "getStartedLabel":
 				this.insets = new Insets(40,0,0,0); 
 				break;
@@ -106,6 +196,7 @@ public class GridBagParams extends GridBagConstraints {
 				// this.anchor = GridBagConstraints.FIRST_LINE_START;
 				this.gridwidth = 4;
 				break;
+
 			case "htmlHelpLabel":
 				this.fill = GridBagConstraints.HORIZONTAL;
 				this.gridx = 0; 
@@ -126,6 +217,8 @@ public class GridBagParams extends GridBagConstraints {
 				this.ipady = 10;
 				this.insets = new Insets(10,5,0,0);
 				break;
+
+
 			case "newPhotosLabel" :
 				this.fill = GridBagConstraints.BOTH;
 				this.gridx = 0; 

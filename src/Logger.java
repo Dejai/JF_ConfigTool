@@ -15,9 +15,9 @@ public class Logger{
 		int month = date.get(date.MONTH)+1; 
 		int day = date.get(date.DAY_OF_MONTH);
 		String logTimeStamp = String.format("%d-%02d-%02d", year, month, day);
-		System.out.println(logTimeStamp);
 		writeToLogFile(fileParam, logTimeStamp, false);
 	}
+	
 	public static void logData(String fileParam, String logData){
 		writeToLogFile(fileParam, logData, true);
 	}

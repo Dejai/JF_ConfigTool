@@ -1,0 +1,26 @@
+2018-03-16 
+file successfully updated
+ 
+<html>
+  <head>
+    <style type="text/css">
+      <!--
+        body { color: white }
+      -->
+    </style>
+    
+  </head>
+  <body>
+    <div>
+      My name is JeRon Fyfield and I am the Founder and CEO of JeRon Fyfield 
+      Photography. My love for photography started as a kid, but my first 
+      camera didn't come until my 18th birthday. I spent a couple years taking 
+      pictures as a hobby, but it wasn't until 2016 that I decided to pursue 
+      the professional photography route. My goal is to bring you <span><b><font color="red">professional 
+      quality pictures</font></b></span> at a <span><font color="red"><b>family-friendly 
+      price.</b></font></span><br><br>So book J.F. Photography today, and <span><i><b>&quot;Lets 
+      Make Magic&quot;!</b></i></span>
+    </div>
+  </body>
+</html>
+
