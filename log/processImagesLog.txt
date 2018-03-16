@@ -9,3 +9,117 @@
 ../images/slideshow/image6.jpg	<--> successfully processed
  
 ../images/slideshow/image4.jpg	<--> started processing
+../images/slideshow/image4.jpg	<--> successfully processed
+ 
+../images/slideshow/image5.jpg	<--> started processing
+../images/slideshow/image5.jpg	<--> successfully processed
+ 
+../images/slideshow/image1.jpg	<--> started processing
+../images/slideshow/image1.jpg	<--> successfully processed
+ 
+../images/slideshow/image0.jpg	<--> started processing
+../images/slideshow/image0.jpg	<--> successfully processed
+ 
+../images/slideshow/image2.jpg	<--> started processing
+../images/slideshow/image2.jpg	<--> successfully processed
+ 
+../images/slideshow/image3.jpg	<--> started processing
+../images/slideshow/image3.jpg	<--> successfully processed
+ 
+ 
+../images/gallery/BadgeAndBluedgy
+ 
+../images/gallery/Close
+ 
+../images/gallery/Dev_Two
+../images/gallery/Dev_Two/image8.jpg	<--> started processing
+../images/gallery/Dev_Two/image8.jpg	<--> successfully processed
+ 
+../images/gallery/Dev_Two/image9.jpg	<--> started processing
+../images/gallery/Dev_Two/image9.jpg	<--> successfully processed
+ 
+../images/gallery/Dev_Two/image14.jpg	<--> started processing
+../images/gallery/Dev_Two/image14.jpg	<--> successfully processed
+ 
+../images/gallery/Dev_Two/image12.jpg	<--> started processing
+../images/gallery/Dev_Two/image12.jpg	<--> successfully processed
+ 
+../images/gallery/Dev_Two/image13.jpg	<--> started processing
+../images/gallery/Dev_Two/image13.jpg	<--> successfully processed
+ 
+../images/gallery/Dev_Two/image11.jpg	<--> started processing
+../images/gallery/Dev_Two/image11.jpg	<--> successfully processed
+ 
+../images/gallery/Dev_Two/image7.jpg	<--> started processing
+../images/gallery/Dev_Two/image7.jpg	<--> successfully processed
+ 
+../images/gallery/Dev_Two/image6.jpg	<--> started processing
+../images/gallery/Dev_Two/image6.jpg	<--> successfully processed
+ 
+../images/gallery/Dev_Two/image4.jpg	<--> started processing
+../images/gallery/Dev_Two/image4.jpg	<--> successfully processed
+ 
+../images/gallery/Dev_Two/image5.jpg	<--> started processing
+../images/gallery/Dev_Two/image5.jpg	<--> successfully processed
+ 
+../images/gallery/Dev_Two/image1.jpg	<--> started processing
+../images/gallery/Dev_Two/image1.jpg	<--> successfully processed
+ 
+../images/gallery/Dev_Two/image2.jpg	<--> started processing
+../images/gallery/Dev_Two/image2.jpg	<--> successfully processed
+ 
+../images/gallery/Dev_Two/image3.jpg	<--> started processing
+../images/gallery/Dev_Two/image3.jpg	<--> successfully processed
+ 
+ 
+../images/gallery/Body
+ 
+../images/gallery/Dev_One
+../images/gallery/Dev_One/image8.jpg	<--> started processing
+../images/gallery/Dev_One/image8.jpg	<--> successfully processed
+ 
+../images/gallery/Dev_One/image14.jpg	<--> started processing
+../images/gallery/Dev_One/image14.jpg	<--> successfully processed
+ 
+../images/gallery/Dev_One/image15.jpg	<--> started processing
+../images/gallery/Dev_One/image15.jpg	<--> successfully processed
+ 
+../images/gallery/Dev_One/image17.jpg	<--> started processing
+../images/gallery/Dev_One/image17.jpg	<--> successfully processed
+ 
+../images/gallery/Dev_One/image16.jpg	<--> started processing
+../images/gallery/Dev_One/image16.jpg	<--> successfully processed
+ 
+../images/gallery/Dev_One/image12.jpg	<--> started processing
+../images/gallery/Dev_One/image12.jpg	<--> successfully processed
+ 
+../images/gallery/Dev_One/image13.jpg	<--> started processing
+../images/gallery/Dev_One/image13.jpg	<--> successfully processed
+ 
+../images/gallery/Dev_One/image11.jpg	<--> started processing
+../images/gallery/Dev_One/image11.jpg	<--> successfully processed
+ 
+../images/gallery/Dev_One/image7.jpg	<--> started processing
+../images/gallery/Dev_One/image7.jpg	<--> successfully processed
+ 
+../images/gallery/Dev_One/image6.jpg	<--> started processing
+../images/gallery/Dev_One/image6.jpg	<--> successfully processed
+ 
+../images/gallery/Dev_One/image4.jpg	<--> started processing
+../images/gallery/Dev_One/image4.jpg	<--> successfully processed
+ 
+../images/gallery/Dev_One/image0.jpg	<--> started processing
+../images/gallery/Dev_One/image0.jpg	<--> successfully processed
+ 
+../images/gallery/Dev_One/image2.jpg	<--> started processing
+../images/gallery/Dev_One/image2.jpg	<--> successfully processed
+ 
+../images/gallery/Dev_One/image3.jpg	<--> started processing
+../images/gallery/Dev_One/image3.jpg	<--> successfully processed
+ 
+ 
+../images/gallery/Fete Gi Dem A Wave
+ 
+../images/gallery/Come Closer
+ 
+../images/gallery/Closer

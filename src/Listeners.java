@@ -87,7 +87,6 @@ public class Listeners extends JFrame {
 				showAboutMesection();
 				break;
 			case "useTinyPNG":
-				// openTinyPNGSite();
 				openWebsite("http://tinypng.com");
 				break;
 			case "Preview":
@@ -108,7 +107,6 @@ public class Listeners extends JFrame {
 				startImageThreads();
 				break;
 			case "Preview Beta Site":
-				// openLocalHost();
 				openWebsite("http://localhost");
 				break;
 			default:
@@ -119,79 +117,8 @@ public class Listeners extends JFrame {
 
 
 
-// General Processes
-	public static String parseAction(String value){
-		int firstIndex = value.indexOf("text=") > 0 ? value.indexOf("text=") : 0;
-		String firstSub = value.substring(firstIndex); 
-		boolean isHTML = firstSub.indexOf("<html>") > 0 ? true : false;
-		boolean isComboBox = firstSub.indexOf("JComboBox") > 0 ? true : false;
-		String action;
-		if (isHTML){
-			action = firstSub.substring(firstSub.indexOf("'")+1, firstSub.indexOf("'>"));
-		} else if (isComboBox){
-			action = "htmlHelpDropdown";
-		} else {
-			action = firstSub.substring(0, firstSub.indexOf(",")).split("=")[1];
-		}
-		return action;
-	}
-
-	public void clearPanel(JComponent panel){
-		theMainFrame.htmlHelpLabel.setVisible(false);
-		theMainFrame.htmlHelpDropdown.setVisible(false);
-		theMainFrame.htmlExampleArea.setVisible(false);
-		panel.removeAll();
-		panel.revalidate();
-		panel.repaint();
-		theMainFrame.innerRightPanel.setPreferredSize(new Dimension(theMainFrame.rightPanel.getWidth()-100, theMainFrame.rightPanel.getHeight()-50));
-	}
-	public void validateView(){
-		theMainFrame.rightPanel.validate();
-	}
-
-
-/* ACTION METHODS - called from Event Listeners */
-
-
-//  Image Processes
-	public void addListOfAlbums(){
-		try{
-			ArrayList<String> galleryAlbums = FilesCRUD.getGalleryAlbums(filePaths.galleryDirectoryPath, filePaths.separator);
-			// clearPanel(theMainFrame.innerRightPanel);
-			theMainFrame.clearPanel(theMainFrame.newPhotosAlbumPanel);
-			newPhotosAlbums.clear();
-
-			theMainFrame.newPhotosAlbumPanel.setLayout(new GridLayout(galleryAlbums.size()+3, 1));
-
-			for (String album : galleryAlbums){
-				String albumName = album.substring(album.lastIndexOf(filePaths.separator)+1);
-				JCheckBox thisCheck = new JCheckBox(albumName);
-				theMainFrame.newPhotosAlbumPanel.add(thisCheck);
-				thisCheck.addActionListener(new ActionListener(){
-					public void actionPerformed(ActionEvent e){
-						if (thisCheck.isSelected()){
-							// System.out.println("Selected");
-							newPhotosAlbums.add(albumName);
-						}
-						// } else if (newPhotosAlbums[albumName] && !thisCheck.isSelected()) {
-						// 	newPhotosAlbums.remove(albumName);
-						// }
-					}
-				});
-			}
-			theMainFrame.validateView();
-		} catch (Exception ex){
-			theMainFrame.resultsMessageDialog(false, ex.getMessage());
-		}
-	}
-
-	public void showImagePreProcessing(){
-		theMainFrame.clearPanel(theMainFrame.innerRightPanel);
-		theMainFrame.loadView("Pre-Image Processing");
-		addListOfAlbums();
-		theMainFrame.validateView();
-	}
-
+/* HELPER FUNCTIONS */
+	
 	public void openWebsite(String site){
 		if (Desktop.isDesktopSupported()) {
 			try {
@@ -211,6 +138,77 @@ public class Listeners extends JFrame {
 		}
 	}
 
+	public static boolean checkIfIsImage(String imagePath){
+		boolean isImage; 
+		if (imagePath.contains(".")) {
+			String extension = imagePath.substring(imagePath.lastIndexOf("."));
+			switch(extension){
+				case ".jpg":
+				case ".png":
+				case ".gif":
+					isImage = true;
+					break;
+				default:
+					isImage = false; 
+			}
+		} else {
+			isImage = false; 
+		}
+		return isImage;
+	} 
+
+	public static String parseAction(String value){
+		int firstIndex = value.indexOf("text=") > 0 ? value.indexOf("text=") : 0;
+		String firstSub = value.substring(firstIndex); 
+		boolean isHTML = firstSub.indexOf("<html>") > 0 ? true : false;
+		boolean isComboBox = firstSub.indexOf("JComboBox") > 0 ? true : false;
+		String action;
+		if (isHTML){
+			action = firstSub.substring(firstSub.indexOf("'")+1, firstSub.indexOf("'>"));
+		} else if (isComboBox){
+			action = "htmlHelpDropdown";
+		} else {
+			action = firstSub.substring(0, firstSub.indexOf(",")).split("=")[1];
+		}
+		return action;
+	}
+
+/* ACTION METHODS - called from Event Listeners */
+
+
+//  Image Processes
+	public void addListOfAlbums(){
+		try{
+			ArrayList<String> galleryAlbums = FilesCRUD.getGalleryAlbums(filePaths.galleryDirectoryPath, filePaths.separator);
+			theMainFrame.clearPanel(theMainFrame.newPhotosAlbumPanel);
+			newPhotosAlbums.clear();
+
+			for (String album : galleryAlbums){
+				String albumName = album.substring(album.lastIndexOf(filePaths.separator)+1);
+				JCheckBox thisCheck = new JCheckBox(albumName);
+				theMainFrame.newPhotosAlbumPanel.add(thisCheck);
+				thisCheck.addActionListener(new ActionListener(){
+					public void actionPerformed(ActionEvent e){
+						if (thisCheck.isSelected()){
+							newPhotosAlbums.add(albumName);
+						} else if (newPhotosAlbums.contains(albumName) && !thisCheck.isSelected()) {
+							newPhotosAlbums.remove(albumName);
+						}
+					}
+				});
+			}
+			theMainFrame.validateView();
+		} catch (Exception ex){
+			theMainFrame.resultsMessageDialog(false, ex.getMessage());
+		}
+	}
+
+	public void showImagePreProcessing(){
+		theMainFrame.loadView("Pre-Image Processing");
+		addListOfAlbums();
+		theMainFrame.validateView();
+	}
+
 	public void startImageThreads(){
 		try{
 			ImagesThread showImagesThread = new ImagesThread(this, "show");
@@ -226,47 +224,21 @@ public class Listeners extends JFrame {
  		}	
 	}
 
-	public void buttonsWhileProcessing(boolean clickable){
-		for (JComponent comp : theMainFrame.actionableButtons){
-			if (!clickable){
-				comp.setEnabled(false);
-			} else {
-				comp.setEnabled(true);
-			}
-		}
-	}
-
-	public void showImageProcessingSection(){
+	public void showProcessingImage(){
 		try{
-			buttonsWhileProcessing(false);
-			clearPanel(theMainFrame.innerRightPanel);
-
-			theMainFrame.processingNow.setText("<html>Processing Images ... <span style='color:orange;font-weight:bold;'>RUNNING NOW</span></html>");
-			theMainFrame.addToPanel(theMainFrame.innerRightPanel, theMainFrame.processingNow, "viewAreaLabel");
-
-			// theMainFrame.innerRightPanel.add(theMainFrame.processingNow, new GridBagParams("processingNow"));
-
+			theMainFrame.loadView("Processing Image");
 			String procImg = filePaths.getRandomGIF();
 			theMainFrame.processingImage.setIcon(new ImageIcon(procImg));
 			theMainFrame.imagePanel.add(theMainFrame.processingImage);
 
-			// theMainFrame.innerRightPanel.add(theMainFrame.imagePanel, new GridBagParams("imagePanel"));
-			theMainFrame.addToPanel(theMainFrame.innerRightPanel, theMainFrame.imagePanel, "viewAreaMainSection");
-
-
-			// theMainFrame.innerRightPanel.add(theMainFrame.workingOn, new GridBagParams("workingOn"));
-			theMainFrame.addToPanel(theMainFrame.innerRightPanel, theMainFrame.workingOn, "viewAreaDescription");
-
-			validateView();
-
+			theMainFrame.validateView();
 		} catch (Exception ex){
 			theMainFrame.resultsMessageDialog(false, ex.getMessage());
-		}	
+		}
 	}
 
 	public void processImages(){
 		try{
-
 			Logger.logData(filePaths.processImagesLogFilePath);
 
 			theMainFrame.workingOn.setText("Working on:");
@@ -276,20 +248,20 @@ public class Listeners extends JFrame {
 			Logger.addBlankLine(filePaths.processImagesLogFilePath);
 			Logger.logData(filePaths.processImagesLogFilePath, filePaths.profileDirectoryPath);
 
-			albumsList.add(processDirectory(filePaths.profileDirectoryPath));
+			albumsList.add(createAlbumFromDirectory(filePaths.profileDirectoryPath));
 
 			// Process the slideshow pictures
 			Logger.addBlankLine(filePaths.processImagesLogFilePath);
 			Logger.logData(filePaths.processImagesLogFilePath, filePaths.slideshowDirectoryPath);
 
-			albumsList.add(processDirectory(filePaths.slideshowDirectoryPath));
+			albumsList.add(createAlbumFromDirectory(filePaths.slideshowDirectoryPath));
 
 			// First get the gallery albums, then process each one. 
 			ArrayList<String> galleryAlbums = FilesCRUD.getGalleryAlbums(filePaths.galleryDirectoryPath, filePaths.separator);
 			for (String gal : galleryAlbums){
 				Logger.addBlankLine(filePaths.processImagesLogFilePath);
 				Logger.logData(filePaths.processImagesLogFilePath, gal);
-				albumsList.add(processDirectory(gal));
+				albumsList.add(createAlbumFromDirectory(gal));
 			}
 
 			// Attempt to write the JSON file for all the albums
@@ -303,7 +275,7 @@ public class Listeners extends JFrame {
 			String resultsMessageFormatted = String.format("<html> %s </html>", resultsMessage);
 
 			theMainFrame.processingNow.setText("Process Images");
-			buttonsWhileProcessing(true);
+			theMainFrame.toggleActionableButtons(true);
 
 			if (oneBool){
 				theMainFrame.workingOn.setText("");
@@ -311,12 +283,6 @@ public class Listeners extends JFrame {
 				theMainFrame.resultsMessageDialog(true, resultsMessageFormatted);
 				theMainFrame.innerRightPanel.remove(theMainFrame.workingOn);
 				theMainFrame.innerRightPanel.remove(theMainFrame.processingImage);				
-				// theMainFrame.innerRightPanel.add(theMainFrame.openLocalhost, new GridBagParams("imagePanel"));
-				// theMainFrame.innerRightPanel.add(theMainFrame.openLocalhost, new GridBagParams("workingOn"));
-				// theMainFrame.addToPanel(theMainFrame.innerRightPanel, theMainFrame.openLocalhost, "viewAreaDescription");
-				// theMainFrame.addToPanel(theMainFrame.innerRightPanel, theMainFrame.workingOn, "viewAreaDescription");
-				// validateView();
-				// openLocalHost();
 			} else {
 				theMainFrame.workingOn.setText("<html>Something went wrong. To try and remedy this, go to the 'src' folder and click on the filePermission file (the one with the gear icon).</html>");
 				theMainFrame.processingImage.setIcon(new ImageIcon(filePaths.oopsImg));
@@ -326,8 +292,8 @@ public class Listeners extends JFrame {
 			theMainFrame.resultsMessageDialog(false, ex.getMessage());
 		}	
 	}
-	
-	public Album processDirectory(String directoryPath){
+
+	public Album createAlbumFromDirectory(String directoryPath){
 		try{
 			File dir = new File(directoryPath);
 			File dirList[] = dir.listFiles();
@@ -349,7 +315,7 @@ public class Listeners extends JFrame {
 				if (!dirList[x].isDirectory() && isImage){
 
 					BufferedImage imageB = ImageIO.read(new File(dirList[x].getPath()));
-					theMainFrame.workingOn.setText(String.format("<html>Working on:<br/><span style='font-weight:bold; color:white;'>%s</span></html>", dirList[x].getPath()));
+					theMainFrame.workingOn.setText(String.format("<html>Working on:&nbsp;<span style='font-weight:bold; color:white;'>%s</span></html>", dirList[x].getPath()));
 
 					if (imageB.getHeight() > imageB.getWidth()){
 						dimensionTemp = "portrait";
@@ -384,26 +350,7 @@ public class Listeners extends JFrame {
 		}
 	}
 
-	public static boolean checkIfIsImage(String imagePath){
-		boolean isImage; 
-		if (imagePath.contains(".")) {
-			String extension = imagePath.substring(imagePath.lastIndexOf("."));
-			switch(extension){
-				case ".jpg":
-				case ".png":
-				case ".gif":
-					isImage = true;
-					break;
-				default:
-					isImage = false; 
-			}
-		} else {
-			isImage = false; 
-		}
-		return isImage;
-	} 
  
-
 
 // About Me Processes
 
@@ -413,20 +360,9 @@ public class Listeners extends JFrame {
 	}
 
 	public void showAboutMesection(){
-		clearPanel(theMainFrame.innerRightPanel);
-		theMainFrame.innerRightPanel.add(theMainFrame.editAboutMe, new GridBagParams("editAboutMe"));
-		theMainFrame.innerRightPanel.add(theMainFrame.toggleAboutMeEditor, new GridBagParams("toggleAboutMeEditor"));
-		theMainFrame.innerRightPanel.add(theMainFrame.saveAboutMe, new GridBagParams("saveAboutMe"));
-
-		theMainFrame.aboutMeTextEditor.setEditable(true);
-		theMainFrame.aboutMeTextEditor.setMargin(new Insets(10,10,0,10));
-		theMainFrame.innerRightPanel.add(theMainFrame.aboutMeScrollPane, new GridBagParams("aboutMeScrollPane"));
-
-		theMainFrame.htmlHelpLabel.setVisible(true);
-		theMainFrame.htmlHelpDropdown.setVisible(true);
-		theMainFrame.htmlExampleArea.setVisible(true);
-
+		theMainFrame.loadView("About Me");
 		theMainFrame.aboutMeTextEditor.setText(FilesCRUD.getAboutMeText(filePaths.aboutMeFilePath));
+		theMainFrame.validateView();
 	}
 
 	public void saveAboutMe(){

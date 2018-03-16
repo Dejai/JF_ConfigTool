@@ -13,13 +13,15 @@ public class ImagesThread extends Thread {
 	public void run(){
 		switch(methodToRun){
 			case "show":
-				listener.showImageProcessingSection();
+				// listener.showImageProcessingSection();
+				listener.showProcessingImage();
 				break;
 			case "start":
 				listener.processImages();
 				break;
 			default:
-				listener.showImageProcessingSection();
+				listener.showProcessingImage();
+				// listener.showImageProcessingSection();
 		}
     }
 

@@ -11,7 +11,6 @@ public class Frames extends JFrame {
 		// Bottom Section
 			JPanel bottomPanel = new JPanel(new FlowLayout());
 			JLabel poweredByLabel = new JLabel("");
-
 		
 		//Left Side 
 			JPanel leftPanel = new JPanel(new FlowLayout());
@@ -42,6 +41,7 @@ public class Frames extends JFrame {
 				int vsp = JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED; // vertical scroll policy
 				int hsp = JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED; //horizontal scroll policy
 				JScrollPane newPhotosAlbumListing = new JScrollPane(newPhotosAlbumPanel, vsp ,hsp );
+
 				JButton continueProcessingPhotos = new JButton ("Continue Processing");
 
 
@@ -96,6 +96,7 @@ public class Frames extends JFrame {
 
 	public void initFrame(String opSystem){
 
+
 		//  Style & Text
 		for (JLabel subH : subheaders){
 			subH.setFont(new Font("Arial", Font.BOLD, 16));
@@ -108,7 +109,8 @@ public class Frames extends JFrame {
 		for (JComponent left : leftSide){
 			left.setBackground(Color.LIGHT_GRAY);
 		}
-		this.getContentPane().setBackground(Color.GRAY);
+
+		getContentPane().setBackground(Color.GRAY);
 		bottomPanel.setBackground(Color.GRAY);
 
 		for (JComponent right : rightSide){
@@ -116,40 +118,14 @@ public class Frames extends JFrame {
 		}
 		poweredByLabel.setText(String.format("<html><div style='color:white;'>Powered By: <span style='font-weight:bold; font-style:italics'>%s</span></div></html>", opSystem));
 
-
 		// Adding Components to panels
-
-		// innerLeftPanel.add(menuLabel, new GridBagParams("menuLabel", 0));
 		addToPanel(innerLeftPanel, menuLabel, "menuLabel");
-		addToPanel(innerLeftPanel, openLocalhost, "menuButton");
-
-		// innerLeftPanel.add(processImages, new GridBagParams("processImagesButton"));
-		// innerLeftPanel.add(processImages, new GridBagParams("menuButton", 2));
-		// innerLeftPanel.add(processImages, new GridBagParams("menuButton", 1));
 		addToPanel(innerLeftPanel, processImages, "menuButton");
-
-		// innerLeftPanel.add(aboutMe, new GridBagParams("aboutMeButton"));
-		// innerLeftPanel.add(aboutMe, new GridBagParams("menuButton", 3));
-		// innerLeftPanel.add(aboutMe, new GridBagParams("menuButton", 2));
 		addToPanel(innerLeftPanel, aboutMe, "menuButton");
-
-
-		// innerLeftPanel.add(htmlHelpLabel, new GridBagParams("htmlHelpLabel"));
-		// innerLeftPanel.add(htmlHelpLabel, new GridBagParams("menuLabel", 3));
 		addToPanel(innerLeftPanel, htmlHelpLabel, "menuLabel", false);
-
-		// htmlHelpLabel.setVisible(false);
-		// innerLeftPanel.add(htmlHelpDropdown, new GridBagParams("htmlHelpDropdown"));
-		// innerLeftPanel.add(htmlHelpDropdown, new GridBagParams("menuDropdown", 4));
 		addToPanel(innerLeftPanel, htmlHelpDropdown, "menuDropdown", false);
-
-		// htmlHelpDropdown.setVisible(false);
-
-		// innerLeftPanel.add(htmlExampleArea, new GridBagParams("htmlExampleArea"));
-		// innerLeftPanel.add(htmlExampleArea, new GridBagParams("menuSection", 5));
 		addToPanel(innerLeftPanel, htmlExampleArea, "menuSection", false);
-
-		// htmlExampleArea.setVisible(false);
+		addToPanel(innerLeftPanel, openLocalhost, "menuButton");
 
 		innerRightPanel.add(getStartedLabel, new GridBagParams("getStartedLabel"));
 
@@ -162,7 +138,11 @@ public class Frames extends JFrame {
 
 		rightPanel.add(innerRightPanel);
 		this.add(rightPanel, new GridBagParams("rightPanel"));
+
 	}
+
+
+/* HELPER FUNCTIONS */
 
 	/*	clearPanel (JComponent):
 			>> This function clears the given panel of all of its components
@@ -181,10 +161,32 @@ public class Frames extends JFrame {
 		rightPanel.validate();
 	}
 
+	public void toggleActionableButtons(boolean clickable){
+		for (JComponent comp : actionableButtons){
+			if (!clickable){
+				comp.setEnabled(false);
+			} else {
+				comp.setEnabled(true);
+			}
+		}
+	}
+
+
+/* FRAME MANIPULATING FUNCTIONS */
+
+
 	public void loadView(String view){
+		clearPanel(innerRightPanel);
+
 		switch(view){
 			case "Pre-Image Processing":
 				loadPreImageProcessing();
+				break;
+			case "Processing Image":
+				loadProcessingImage();
+				break;
+			case "About Me":
+				loadAboutMeSection();
 				break;
 			default:
 				// loadError();
@@ -192,20 +194,47 @@ public class Frames extends JFrame {
 		}
 	}
 
+
+	/*	loadPreImageProcessing():
+			>> This function loads the different component for pre-processing questions
+			>> This includes a reminder for compressing the images
+			>> It also includes an option select which albums have new photos. 
+	*/
 	public void loadPreImageProcessing(){
-		// clearPanel(this.innerRightPanel);
-		// this.innerRightPanel.add(this.compressImagesReminder, new GridBagParams("compressImagesReminder"));
 		processingNow.setText("<html>Processing Images</html>");
 		addToPanel(innerRightPanel, processingNow, "viewAreaLabel");
 		addToPanel(innerRightPanel, compressImagesReminder, "menuLabel");
 		addToPanel(innerRightPanel, useTinyPng, "viewAreaButton");
 		addToPanel(innerRightPanel, newPhotosLabel, "menuLabel");
+
+		newPhotosAlbumPanel.setLayout(new GridLayout(6,6));
+		
 		addToPanel(innerRightPanel, newPhotosAlbumListing, "viewAreaMainSection");
 		addToPanel(innerRightPanel, startImageProcessing, "viewAreaButton");
-		// this.innerRightPanel.add(this.useTinyPng, new GridBagParams("useTinyPng"));
-		// this.innerRightPanel.add(this.startImageProcessing, new GridBagParams("startImageProcessing"));
 	}
 
+	public void loadProcessingImage(){
+		toggleActionableButtons(false);
+		processingNow.setText("<html>Processing Images ... <span style='color:orange;font-weight:bold;'>RUNNING NOW</span></html>");
+		addToPanel(innerRightPanel, processingNow, "viewAreaLabel");
+		addToPanel(innerRightPanel, imagePanel, "viewAreaMainSection");
+		addToPanel(innerRightPanel, workingOn, "viewAreaDescription");
+	}
+
+	public void loadAboutMeSection(){
+		addToPanel(innerRightPanel, editAboutMe, "viewAreaLabel");
+		addToPanel(innerRightPanel, toggleAboutMeEditor, "toggleAboutMeEditor");
+		addToPanel(innerRightPanel, saveAboutMe, "saveAboutMe");
+
+		aboutMeTextEditor.setEditable(true);
+		aboutMeTextEditor.setMargin(new Insets(10,10,0,10));
+		addToPanel(innerRightPanel, aboutMeScrollPane, "aboutMeScrollPane");
+
+		htmlHelpLabel.setVisible(true);
+		htmlHelpDropdown.setVisible(true);
+		htmlExampleArea.setVisible(true);
+
+	}
 
 	/*	addToPanel(JPanel, JComponent, String):
 			>> This function adds a new component to the given panel
@@ -222,20 +251,13 @@ public class Frames extends JFrame {
 			>> This also sets the visibility of the JComponent
 	*/ 
 	public void addToPanel(JPanel panel, JComponent component, String gridBagLabel, boolean showComponent){
-		int row = getNumberOfComponents(panel);
-		panel.add(component, new GridBagParams(gridBagLabel,row));
+		addToPanel(panel, component, gridBagLabel);  // Calls the other function with the shared params;
 		component.setVisible(showComponent);
 	}
 
 	public int getNumberOfComponents(JComponent component){
 		return component.getComponents().length;
 	}
-
-
-
-
-
-
 
 	public void resultsMessageDialog(boolean success, String msg){
 		String message = !msg.isEmpty() ? msg : "Unknown Error!";
