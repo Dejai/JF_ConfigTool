@@ -2,11 +2,12 @@ import java.util.*;
 import javax.swing.*;
 import java.awt.*;
 
+
 public class Frames extends JFrame {
 
 	// JComponent Attributes
 		// Main Window & Content Panel
-			JPanel contentPane = new JPanel();
+			// JPanel contentPane = new JPanel();
 
 		// Bottom Section
 			JPanel bottomPanel = new JPanel(new FlowLayout());
@@ -30,19 +31,22 @@ public class Frames extends JFrame {
 
 			JLabel compressImagesReminder = new JLabel("<html><p>Step #1: Did you compress your images!?</p></html>");
 			JButton useTinyPng = new JButton("<html><span id='useTinyPNG'></span><font color='blue'><strong>Click here to go to TinyPng.com</strong></font></html>");
-			JButton openLocalhost = new JButton("Preview Beta Site");
+			JButton openLocalhost = new JButton("<html><span id='BetaSite'></span></html>");
 			JButton startImageProcessing = new JButton("Start Processing");
 
 
 			// Processing Images
 				JLabel newPhotosLabel = new JLabel("Step #2: Does any album have NEW photos?");
 				// JLabel newPhotosSentence = new JLabel("Select any album that has new photos.");
-				JPanel newPhotosAlbumPanel = new JPanel(new GridLayout(1,1));
+				JPanel newPhotosAlbumPanel = new JPanel(new GridLayout(5,5));
 				int vsp = JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED; // vertical scroll policy
 				int hsp = JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED; //horizontal scroll policy
 				JScrollPane newPhotosAlbumListing = new JScrollPane(newPhotosAlbumPanel, vsp ,hsp );
 
 				JButton continueProcessingPhotos = new JButton ("Continue Processing");
+
+				JEditorPane endOfProcessingEditor = new JEditorPane(); 
+				JScrollPane logMessages = new JScrollPane(endOfProcessingEditor, vsp, hsp);
 
 
 				JPanel imagePanel = new JPanel(new GridLayout(0,1));
@@ -50,6 +54,10 @@ public class Frames extends JFrame {
 
 				JLabel processingNow = new JLabel("");
 				JLabel workingOn = new JLabel("Working on:");
+
+				JLabel imagesProcessed = new JLabel("Done processing images. You can view the processing log below");
+				JLabel imagesProcessedOptions = new JLabel("Click the logo to open the beta preview of the site");
+				JLabel logMessagesTitle = new JLabel("Log Messages:");
 
 			// About Me Sections
 				JLabel editAboutMe = new JLabel("Edit About Me");
@@ -76,10 +84,14 @@ public class Frames extends JFrame {
 												startImageProcessing, htmlHelpDropdown,
 												continueProcessingPhotos, openLocalhost };
 			// JComponent [] actionableButtons = { processImages, aboutMe, useTinyPng, toggleAboutMeEditor };
-			JLabel [] subheaders= {htmlHelpLabel, newPhotosLabel, compressImagesReminder};
+			JLabel [] subheaders= {	htmlHelpLabel, newPhotosLabel,
+									compressImagesReminder, logMessagesTitle, imagesProcessed,
+									imagesProcessedOptions
+								};
 			JLabel [] headers= {menuLabel, processingNow, editAboutMe, getStartedLabel };
 			JComponent [] leftSide = {leftPanel, innerLeftPanel, bottomPanel};
 			JComponent [] rightSide = {rightPanel, innerRightPanel };
+			JComponent [] editorPanes = { aboutMeTextEditor };
 
 	// public Frames( String title, boolean testState, Listeners frameListener ){
 	public Frames( String title ){
@@ -94,6 +106,10 @@ public class Frames extends JFrame {
 		System.out.println("This is the main -- OG -- Frame");
 	}
 
+	/*	initFrame(String):
+			>> This function adds the initial components the frame
+			>> It also manages to style the headers, and background colors
+	*/
 	public void initFrame(String opSystem){
 
 
@@ -118,16 +134,22 @@ public class Frames extends JFrame {
 		}
 		poweredByLabel.setText(String.format("<html><div style='color:white;'>Powered By: <span style='font-weight:bold; font-style:italics'>%s</span></div></html>", opSystem));
 
+
 		// Adding Components to panels
+		setIconImage();
+		addToPanel(innerLeftPanel, openLocalhost, "menuButton");
+
 		addToPanel(innerLeftPanel, menuLabel, "menuLabel");
 		addToPanel(innerLeftPanel, processImages, "menuButton");
 		addToPanel(innerLeftPanel, aboutMe, "menuButton");
 		addToPanel(innerLeftPanel, htmlHelpLabel, "menuLabel", false);
 		addToPanel(innerLeftPanel, htmlHelpDropdown, "menuDropdown", false);
 		addToPanel(innerLeftPanel, htmlExampleArea, "menuSection", false);
-		addToPanel(innerLeftPanel, openLocalhost, "menuButton");
 
-		innerRightPanel.add(getStartedLabel, new GridBagParams("getStartedLabel"));
+
+
+		addToPanel(innerRightPanel, getStartedLabel, "viewAreaLabel");
+		addToPanel(innerRightPanel, imagesProcessedOptions, "viewAreaLabel");
 
 		// Adding panels to the frame
 		leftPanel.add(innerLeftPanel);
@@ -137,12 +159,23 @@ public class Frames extends JFrame {
 		this.add(bottomPanel, new GridBagParams("bottomPanel"));
 
 		rightPanel.add(innerRightPanel);
-		this.add(rightPanel, new GridBagParams("rightPanel"));
+			this.add(rightPanel, new GridBagParams("rightPanel"));
 
 	}
 
 
 /* HELPER FUNCTIONS */
+
+	public void setIconImage(){
+		openLocalhost.setPreferredSize(new Dimension(90,90));
+		Image original = new ImageIcon(Main.mainFilePaths.logoImageFilePath).getImage();
+		Image scaledImage = original.getScaledInstance(90, 90, Image.SCALE_SMOOTH);
+		openLocalhost.setIcon(new ImageIcon(scaledImage));
+		openLocalhost.setBackground(Color.BLACK);
+		// openLocalhost.setForeground(Color.BLACK);
+		openLocalhost.setOpaque(true); 
+		openLocalhost.setBorderPainted(false);
+	}
 
 	/*	clearPanel (JComponent):
 			>> This function clears the given panel of all of its components
@@ -157,10 +190,17 @@ public class Frames extends JFrame {
 		innerRightPanel.setPreferredSize(new Dimension(rightPanel.getWidth()-100, rightPanel.getHeight()-50));
 	}
 
+	/*	validateView():
+			>> This function is a simple call to the  validat() function for the frame; 
+	*/
 	public void validateView(){
-		rightPanel.validate();
+		this.validate();
 	}
 
+	/*	toggleActionableButtons(Boolean):
+			>> This toggles whether or not you can click the actionable buttons
+			>> They are disabled when the images are being processed
+	*/
 	public void toggleActionableButtons(boolean clickable){
 		for (JComponent comp : actionableButtons){
 			if (!clickable){
@@ -171,10 +211,19 @@ public class Frames extends JFrame {
 		}
 	}
 
+	public void addLogMessage(String str){
+		// endOfProcessingPanel.append(str);
+		endOfProcessingEditor.setText(str);
+	}
+
 
 /* FRAME MANIPULATING FUNCTIONS */
 
 
+	/*	loadView(String):
+			>> This function is used to manage which page view needs to be shown
+			>> It calls the appropriate functions to load the individual pages
+	*/
 	public void loadView(String view){
 		clearPanel(innerRightPanel);
 
@@ -187,6 +236,9 @@ public class Frames extends JFrame {
 				break;
 			case "About Me":
 				loadAboutMeSection();
+				break;
+			case "Images Processed":
+				loadImagesProcessed();
 				break;
 			default:
 				// loadError();
@@ -207,12 +259,16 @@ public class Frames extends JFrame {
 		addToPanel(innerRightPanel, useTinyPng, "viewAreaButton");
 		addToPanel(innerRightPanel, newPhotosLabel, "menuLabel");
 
-		newPhotosAlbumPanel.setLayout(new GridLayout(6,6));
+		// newPhotosAlbumPanel.setLayout(new GridLayout(6,6));
 		
 		addToPanel(innerRightPanel, newPhotosAlbumListing, "viewAreaMainSection");
 		addToPanel(innerRightPanel, startImageProcessing, "viewAreaButton");
 	}
 
+	/*	loadProcessingImage():
+			>> This function loads the view of the components that ask questions before procesing images
+			>> Includes a question about compressing the images, and which ones are new
+	*/
 	public void loadProcessingImage(){
 		toggleActionableButtons(false);
 		processingNow.setText("<html>Processing Images ... <span style='color:orange;font-weight:bold;'>RUNNING NOW</span></html>");
@@ -221,19 +277,35 @@ public class Frames extends JFrame {
 		addToPanel(innerRightPanel, workingOn, "viewAreaDescription");
 	}
 
+	public void loadImagesProcessed(){
+		addToPanel(innerRightPanel, processingNow, "viewAreaLabel");
+		addToPanel(innerRightPanel,imagesProcessed, "viewAreaLabel");
+		addToPanel(innerRightPanel,imagesProcessedOptions, "viewAreaLabel");
+		addToPanel(innerRightPanel, logMessagesTitle, "viewAreaLabel");
+		addToPanel(innerRightPanel, logMessages, "aboutMeScrollPane");
+	}
+
+	public void loadLoggerMessages(){
+		addToPanel(innerRightPanel, processingNow, "viewAreaLabel");		
+		
+	}
+
+	/*	loadAboutMeSection():
+			>> This function adds the components for the About Me section to the right panel
+	*/
 	public void loadAboutMeSection(){
 		addToPanel(innerRightPanel, editAboutMe, "viewAreaLabel");
 		addToPanel(innerRightPanel, toggleAboutMeEditor, "toggleAboutMeEditor");
 		addToPanel(innerRightPanel, saveAboutMe, "saveAboutMe");
 
-		aboutMeTextEditor.setEditable(true);
-		aboutMeTextEditor.setMargin(new Insets(10,10,0,10));
+		// aboutMeTextEditor.setEditable(true);
+		// aboutMeTextEditor.setMargin(new Insets(10,10,0,10));
+
 		addToPanel(innerRightPanel, aboutMeScrollPane, "aboutMeScrollPane");
 
 		htmlHelpLabel.setVisible(true);
 		htmlHelpDropdown.setVisible(true);
 		htmlExampleArea.setVisible(true);
-
 	}
 
 	/*	addToPanel(JPanel, JComponent, String):

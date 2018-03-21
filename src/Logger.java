@@ -2,6 +2,9 @@ import java.util.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+
 
 
 public class Logger{
@@ -9,13 +12,12 @@ public class Logger{
 	private static BufferedWriter logger;
 
 
-	public static void logData(String fileParam){
-		Calendar date = Calendar.getInstance();
-		int year = date.get(date.YEAR);
-		int month = date.get(date.MONTH)+1; 
-		int day = date.get(date.DAY_OF_MONTH);
-		String logTimeStamp = String.format("%d-%02d-%02d", year, month, day);
+	public static void startNewLog(String fileParam){
+		DateFormat dateFormat = new SimpleDateFormat("EEE, MMMMM d - HH:mm");
+		Date dateTime = Calendar.getInstance().getTime();
+		String logTimeStamp = dateFormat.format(dateTime);
 		writeToLogFile(fileParam, logTimeStamp, false);
+		addBlankLine(fileParam);
 	}
 	
 	public static void logData(String fileParam, String logData){

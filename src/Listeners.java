@@ -35,9 +35,6 @@ public class Listeners extends JFrame {
 			} else  if (actionable instanceof JComboBox){
 				addListeners( (JComboBox) actionable, action );
 			}
-			// } else if (actionable instanceof JLabel){
-			// 	addListeners((JLabel) actionable, action);
-			// }
 		}
 	}
 
@@ -106,7 +103,7 @@ public class Listeners extends JFrame {
 			case "Continue Processing":
 				startImageThreads();
 				break;
-			case "Preview Beta Site":
+			case "BetaSite":
 				openWebsite("http://localhost");
 				break;
 			default:
@@ -239,7 +236,7 @@ public class Listeners extends JFrame {
 
 	public void processImages(){
 		try{
-			Logger.logData(filePaths.processImagesLogFilePath);
+			Logger.startNewLog(filePaths.processImagesLogFilePath);
 
 			theMainFrame.workingOn.setText("Working on:");
 
@@ -247,12 +244,14 @@ public class Listeners extends JFrame {
 			
 			Logger.addBlankLine(filePaths.processImagesLogFilePath);
 			Logger.logData(filePaths.processImagesLogFilePath, filePaths.profileDirectoryPath);
+			
 
 			albumsList.add(createAlbumFromDirectory(filePaths.profileDirectoryPath));
 
 			// Process the slideshow pictures
 			Logger.addBlankLine(filePaths.processImagesLogFilePath);
 			Logger.logData(filePaths.processImagesLogFilePath, filePaths.slideshowDirectoryPath);
+			
 
 			albumsList.add(createAlbumFromDirectory(filePaths.slideshowDirectoryPath));
 
@@ -268,21 +267,20 @@ public class Listeners extends JFrame {
 			boolean oneBool = FilesCRUD.writeJSONFile(filePaths.albumsJSONPath, albumsList);
 
 
-			String successMesage = "<span style='color:green;font-weight:bold'>SUCCESS:</span> All images were processed successfully.";
+			String successMesage = "<span style='color:green;font-weight:bold'>SUCCESS:</span> Images were processed successfully.";
 			String failMessage = "<span style='color:red;font-weight:bold'>ERROR:</span>Could not complete the process.";
 
 			String resultsMessage = oneBool ? successMesage : failMessage;
 			String resultsMessageFormatted = String.format("<html> %s </html>", resultsMessage);
 
-			theMainFrame.processingNow.setText("Process Images");
-			theMainFrame.toggleActionableButtons(true);
-
 			if (oneBool){
-				theMainFrame.workingOn.setText("");
-				theMainFrame.processingImage.setIcon(new ImageIcon(filePaths.successProcessingImg));
 				theMainFrame.resultsMessageDialog(true, resultsMessageFormatted);
-				theMainFrame.innerRightPanel.remove(theMainFrame.workingOn);
-				theMainFrame.innerRightPanel.remove(theMainFrame.processingImage);				
+				theMainFrame.loadView("Images Processed");
+				theMainFrame.processingImage.setIcon(new ImageIcon(filePaths.successProcessingImg));
+				// theMainFrame.workingOn.setText("");
+				// theMainFrame.processingImage.setIcon(new ImageIcon(filePaths.successProcessingImg));
+				// theMainFrame.innerRightPanel.remove(theMainFrame.workingOn);
+				// // theMainFrame.innerRightPanel.remove(theMainFrame.processingImage);				
 			} else {
 				theMainFrame.workingOn.setText("<html>Something went wrong. To try and remedy this, go to the 'src' folder and click on the filePermission file (the one with the gear icon).</html>");
 				theMainFrame.processingImage.setIcon(new ImageIcon(filePaths.oopsImg));
@@ -290,7 +288,12 @@ public class Listeners extends JFrame {
 			}
 		} catch (Exception ex){
 			theMainFrame.resultsMessageDialog(false, ex.getMessage());
-		}	
+		} finally {
+			theMainFrame.processingNow.setText("Processing Images");
+			theMainFrame.toggleActionableButtons(true);
+			theMainFrame.addLogMessage( FilesCRUD.getLogMessages(filePaths.processImagesLogFilePath) );
+			theMainFrame.validateView();			
+		}
 	}
 
 	public Album createAlbumFromDirectory(String directoryPath){
@@ -367,7 +370,7 @@ public class Listeners extends JFrame {
 
 	public void saveAboutMe(){
 		try{
-			Logger.logData(filePaths.aboutMeLogFilePath);
+			Logger.startNewLog(filePaths.aboutMeLogFilePath);
 
 			String saveText;
 			boolean isSaved; 

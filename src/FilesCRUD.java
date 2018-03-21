@@ -50,6 +50,21 @@ public class FilesCRUD {
 		}
 	}
 
+	public static String getLogMessages(String logFilePath){
+		try {
+			String line; 
+			String fullText = ""; 
+			BufferedReader aboutMeReader = new BufferedReader(new FileReader(logFilePath));
+			while ( (line = aboutMeReader.readLine()) != null){
+				fullText = fullText.concat(line).concat("\n");
+			}
+			return fullText;
+		} catch (Exception ex){
+			ex.printStackTrace();
+			return null; 
+		}
+	}
+
 
 	public static boolean writeAboutMeText(String fileParam, String newText){
 		try{

@@ -33,7 +33,7 @@ public class GridBagParams extends GridBagConstraints {
 		switch (type) {
 			case "menuLabel":
 				this.fill = GridBagConstraints.HORIZONTAL;
-				this.weightx = 0.5;				
+				this.weightx = 0.3;				
 				this.gridx = 0; 
 				this.gridy = row;
 				this.ipadx = 50;
@@ -92,12 +92,14 @@ public class GridBagParams extends GridBagConstraints {
 			case "toggleAboutMeEditor" :
 				this.fill = GridBagConstraints.HORIZONTAL;
 				this.gridx = 1; 
+				this.weightx = 0.2;
 				this.gridy = 0;
 				this.anchor = GridBagConstraints.CENTER;
 				this.insets = new Insets(10,0,20,10);  //top padding
 				break;
 			case "saveAboutMe" :
 				this.fill = GridBagConstraints.BOTH;
+				this.weightx = 0.2;
 				this.gridx = 2; 
 				this.gridy = 0;
 				this.anchor = GridBagConstraints.CENTER;
@@ -106,33 +108,13 @@ public class GridBagParams extends GridBagConstraints {
 			case "aboutMeScrollPane":
 				this.fill = GridBagConstraints.BOTH;
 				this.gridx = 0; 
-				this.gridy = 1;
+				this.gridy = row;
 				this.weighty = 0.5;
 				this.ipadx = 30;
 				this.weightx = 0.0;
 				// this.anchor = GridBagConstraints.FIRST_LINE_START;
 				this.gridwidth = 4;
 				break;
-			// case "htmlHelpLabel":
-			// 	this.fill = GridBagConstraints.HORIZONTAL;
-			// 	this.gridx = 0; 
-			// 	this.gridy = 4;
-			// 	this.insets = new Insets(10,5,0,0);  //top padding
-			// 	break;
-			// case "htmlHelpDropdown":
-			// 	this.weightx = 0.5;			
-			// 	this.gridx = 0; 
-			// 	this.gridy = 5;
-			// 	this.insets = new Insets(10,5,0,10);
-			// 	break;
-			// case "htmlExampleArea":
-			// 	this.fill = GridBagConstraints.HORIZONTAL;
-			// 	this.weightx = 0.5;			
-			// 	this.gridx = 0; 
-			// 	this.gridy = 6;
-			// 	this.ipady = 10;
-			// 	this.insets = new Insets(10,5,0,0);
-			// 	break;
 			default:
 				System.out.println("Not a valid option!");
 		}

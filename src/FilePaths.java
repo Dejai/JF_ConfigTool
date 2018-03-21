@@ -15,6 +15,8 @@ public class FilePaths{
 	protected String profileDirectoryPath;
 	protected String processImagesLogFilePath;
 	protected String aboutMeLogFilePath;
+	protected String logoImageFilePath;
+
 	protected String separator; 
 	protected String prefix;
 	protected String oopsImg; 
@@ -27,9 +29,12 @@ public class FilePaths{
 		opSystemFull =  System.getProperty("os.name");
 		opSystem = opSystemFull.toLowerCase().indexOf("mac") >= 0 ? "mac" : "windows" ;
 
-		separator = opSystem == "mac" ? "/" : "\\";
+		separator = opSystem == "mac" ? "/" : "\\";	
 		
 		prefix = isTest ? ".." + separator : "";
+
+
+
 
 		setFilePaths(opSystem);
 
@@ -38,22 +43,23 @@ public class FilePaths{
 
 	public void setFilePaths(String os){
 
-		aboutMeFilePath = buildPath("config_aboutMe.txt");
-		albumsJSONPath = buildPath("config_albumsJSON.json");
-		galleryDirectoryPath = buildPath("images_gallery");
-		slideshowDirectoryPath = buildPath("images_slideshow");
-		profileDirectoryPath = buildPath("images_assets_profile");
-		processImagesLogFilePath = buildPath("log_processImagesLog.txt");
-		aboutMeLogFilePath = buildPath("log_aboutMeLog.txt");
-		gifsPath = buildPath("images_assets_gifs");
-		oopsImg = buildPath("images_assets_icons_oops2.png");
-		successProcessingImg = buildPath("images_assets_icons_successProcessing.png");
+		aboutMeFilePath = buildPath("config>aboutMe.txt");
+		albumsJSONPath = buildPath("config>albumsJSON.json");
+		galleryDirectoryPath = buildPath("images>gallery");
+		slideshowDirectoryPath = buildPath("images>slideshow");
+		profileDirectoryPath = buildPath("images>assets>profile");
+		processImagesLogFilePath = buildPath("log>processImagesLog.txt");
+		aboutMeLogFilePath = buildPath("log>aboutMeLog.txt");
+		gifsPath = buildPath("images>assets>gifs");
+		oopsImg = buildPath("images>assets>icons>oops2.png");
+		successProcessingImg = buildPath("images>assets>icons>successProcessing.png");
+		logoImageFilePath = buildPath("images>assets>logo>jfphotobiz_logo.png");
 
 	}
 
 	public String buildPath(String filePath){
 		String buildSeparator = separator == "\\" ? "\\\\" : "/";
-		return prefix + filePath.replaceAll("_", buildSeparator);
+		return prefix + filePath.replaceAll(">", buildSeparator);
 	}
 
 
