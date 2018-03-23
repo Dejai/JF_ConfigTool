@@ -93,7 +93,7 @@ public class GridBagParams extends GridBagConstraints {
 				this.fill = GridBagConstraints.HORIZONTAL;
 				this.gridx = 1; 
 				this.weightx = 0.2;
-				this.gridy = 0;
+				this.gridy = row - row;
 				this.anchor = GridBagConstraints.CENTER;
 				this.insets = new Insets(10,0,20,10);  //top padding
 				break;
@@ -101,7 +101,7 @@ public class GridBagParams extends GridBagConstraints {
 				this.fill = GridBagConstraints.BOTH;
 				this.weightx = 0.2;
 				this.gridx = 2; 
-				this.gridy = 0;
+				this.gridy = row - row;
 				this.anchor = GridBagConstraints.CENTER;
 				this.insets = new Insets(10,0,20,10);  //top padding
 				break;
@@ -122,25 +122,13 @@ public class GridBagParams extends GridBagConstraints {
 
 	public void returnConstraints(String type){
 		switch( type ){
-			case "menuLabel":
-				this.fill = GridBagConstraints.HORIZONTAL;
-				this.weightx = 0.5;				
-				this.gridx = 0; 
-				this.gridy = MenuRows;
-				MenuRows++;
-				this.ipadx = 50;
-				this.insets = new Insets(10,5,0,10);  //top padding
-				break;
-			case "getStartedLabel":
-				this.insets = new Insets(40,0,0,0); 
-				break;
 			case "bottomPanel" :
-				this.ipady = 0;       //reset to default
-				this.anchor = GridBagConstraints.LINE_START; //bottom of space
-				this.insets = new Insets(0,10,0,0);  //top padding
-				this.gridx = 0;       //aligned with button 2
-				this.gridwidth = 1;   //2 columns wide
-				this.gridy = 1;       //third row
+				this.ipady = 0;      
+				this.anchor = GridBagConstraints.LINE_START; 
+				this.insets = new Insets(0,10,0,0); 
+				this.gridx = 0;       
+				this.gridwidth = 1;   
+				this.gridy = 1;       
 				break;
 			case "leftPanel":
 				this.fill = GridBagConstraints.BOTH;
@@ -155,110 +143,6 @@ public class GridBagParams extends GridBagConstraints {
 				this.gridy = 0;
 				this.weighty = 1.0;
 				break; 
-			case "compressImagesReminder":
-				this.fill = GridBagConstraints.HORIZONTAL;
-				this.gridx = 0;
-				this.gridy = 0;
-				this.weightx = 1;
-				this.insets = new Insets(0,0,20,60);
-				break;
-			case "useTinyPng":
-				this.fill = GridBagConstraints.HORIZONTAL;
-				this.gridx = 0;
-				this.gridy = 1;
-				this.weightx = 1;
-				this.insets = new Insets(0,0,20,60);
-				break;
-			case "startImageProcessing":
-				this.fill = GridBagConstraints.HORIZONTAL;
-				this.gridx = 0;
-				this.gridy = 2;
-				this.weightx = 0;
-				this.insets = new Insets(0,0,20,60);
-				break;
-			case "editAboutMe" :
-				this.fill = GridBagConstraints.BOTH;
-				this.gridx = 0; 
-				this.gridy = 0;
-				this.anchor = GridBagConstraints.CENTER;
-				this.insets = new Insets(10,0,20,10);  //top padding
-				break;
-
-			case "htmlHelpLabel":
-				this.fill = GridBagConstraints.HORIZONTAL;
-				this.gridx = 0; 
-				this.gridy = 4;
-				this.insets = new Insets(10,5,0,0);  //top padding
-				break;
-			case "htmlHelpDropdown":
-				this.weightx = 0.5;			
-				this.gridx = 0; 
-				this.gridy = 5;
-				this.insets = new Insets(10,5,0,10);
-				break;
-			case "htmlExampleArea":
-				this.fill = GridBagConstraints.HORIZONTAL;
-				this.weightx = 0.5;			
-				this.gridx = 0; 
-				this.gridy = 6;
-				this.ipady = 10;
-				this.insets = new Insets(10,5,0,0);
-				break;
-
-
-			case "newPhotosLabel" :
-				this.fill = GridBagConstraints.BOTH;
-				this.gridx = 0; 
-				this.gridy = 0;
-				this.anchor = GridBagConstraints.CENTER;
-				this.insets = new Insets(10,0,20,0);  //top padding
-				break;
-			case "newPhotosSentence" :
-				this.fill = GridBagConstraints.BOTH;
-				this.gridx = 0; 
-				this.gridy = 1;
-				this.anchor = GridBagConstraints.CENTER;
-				this.insets = new Insets(10,0,20,0);  //top padding
-				break;
-			case "newPhotosAlbumListing":
-				this.fill = GridBagConstraints.BOTH;
-				this.gridx = 0; 
-				this.gridy = 2;
-				this.weighty = 0.5;
-				this.ipadx = 30;
-				this.weightx = 0.0;
-				this.gridwidth = 4;
-				break;
-			case "continueProcessingPhotos":
-				// this.fill = GridBagConstraints.BOTH;
-				this.gridx = 0; 
-				this.gridy = 3;
-				this.insets = new Insets(10,0,20,0);  //top padding
-				// this.weighty = 0.5;
-				// this.ipadx = 40;
-				// this.weightx = 0.0;
-				// this.gridwidth = 4;
-				break;
-			case "processingNow" :
-				this.fill = GridBagConstraints.BOTH;
-				this.gridx = 0; 
-				this.gridy = 0;
-				this.anchor = GridBagConstraints.CENTER;
-				this.insets = new Insets(10,0,20,0);  //top padding
-				break;
-			case "imagePanel":
-				this.fill = GridBagConstraints.BOTH;
-				this.gridx = 0; 
-				this.gridy = 1;
-				this.anchor = GridBagConstraints.CENTER;
-				break;
-			case "workingOn":
-				this.fill = GridBagConstraints.HORIZONTAL;
-				this.weighty = 1.0;
-				this.gridx = 0; 
-				this.gridy = 2;
-				this.insets = new Insets(10,0,0,0);  //top padding
-				break;
 			default:
 				System.out.println("Did not catch the GridBagConstraint selector");
 		}
