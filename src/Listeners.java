@@ -139,6 +139,7 @@ public class Listeners extends JFrame {
 		boolean isImage; 
 		if (imagePath.contains(".")) {
 			String extension = imagePath.substring(imagePath.lastIndexOf("."));
+			extension = extension.toLowerCase();
 			switch(extension){
 				case ".jpg":
 				case ".png":

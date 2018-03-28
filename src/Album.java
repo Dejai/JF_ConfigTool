@@ -15,8 +15,12 @@ class Album {
 		hasCoverImage = false;
 	}
 
+	public String setJSONPath(String path){
+		return path.replace("\\", "/");
+	}
+	
 	public void setCoverImage(String img){
-		String webPathImg = img.replace("\\", "/");
+		String webPathImg = setJSONPath(img);
 		coverImage = webPathImg;
 		hasCoverImage = true; 
 	}
@@ -39,6 +43,10 @@ class Album {
 		return String.format("Album:%s\n", this.albumName);
 	}
 
+	public void toJSONPath(String path){
+
+	}
+
 	public String albumJSONObject(boolean isLast){
 		StringBuilder jsonObj = new StringBuilder();
 		Calendar date = Calendar.getInstance();
@@ -54,7 +62,7 @@ class Album {
 			StringBuilder picsObj = new StringBuilder();
 			for (Picture pic : this.pictures){
 				picsObj.append("{");
-				picsObj.append("\"path\" : \"/" + pic.path + "\", ");
+				picsObj.append("\"path\" : \"/" + setJSONPath(pic.path) + "\", ");
 				picsObj.append("\"width\" : " + pic.width + ", ");
 				picsObj.append("\"height\" : " + pic.height + ", ");
 				picsObj.append("\"dimension\" : \"" + pic.dimension + "\"");
